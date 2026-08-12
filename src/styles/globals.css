@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- Typography ---- */
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+
+  /* ---- Luxury palette ---- */
+  --color-ink: #0b0b0c;
+  --color-ink-soft: #1c1b1a;
+  --color-navy: #07243d;
+
+  --color-gold-50: #fbf7ee;
+  --color-gold-100: #f3e9d1;
+  --color-gold-200: #e8d6ac;
+  --color-gold-300: #dbbf85;
+  --color-gold-400: #d1b077;
+  --color-gold-500: #c8a96a;
+  --color-gold-600: #ad8c50;
+  --color-gold-700: #8a6e3f;
+  --color-gold-800: #6c5632;
+  --color-gold-900: #4a3b23;
+  --color-gold: #c8a96a;
+
+  --color-warm-50: #faf9f7;
+  --color-warm-100: #f3f1ed;
+  --color-warm-200: #e6e2da;
+  --color-warm-300: #d3ccc0;
+  --color-warm-400: #b3a897;
+  --color-warm-500: #94886f;
+  --color-warm-600: #766c57;
+  --color-warm-700: #5c5445;
+  --color-warm-800: #423c32;
+  --color-warm-900: #2a251f;
+
+  --color-cream: #f8f6f2;
+  --color-cream-dark: #f0ece3;
+
+  /* ---- Shadows ---- */
+  --shadow-luxury: 0 20px 60px -15px rgb(11 11 12 / 0.15);
+  --shadow-luxury-lg: 0 30px 90px -20px rgb(11 11 12 / 0.25);
+  --shadow-gold: 0 10px 40px -10px rgb(200 169 106 / 0.45);
+
+  /* ---- Easing ---- */
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-float: float 4s var(--ease-luxury) infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-warm-200;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-ink font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    letter-spacing: 0.01em;
+  }
+
+  ::selection {
+    @apply bg-gold-200 text-ink;
+  }
+
+  button,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"],
+  select,
+  summary {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  input:disabled,
+  select:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .glass {
+    background: rgb(255 255 255 / 0.65);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+  }
+
+  .glass-dark {
+    background: rgb(11 11 12 / 0.5);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* ---- Swiper bullet theming ---- */
+.hero-pagination .swiper-pagination-bullet,
+.testimonial-pagination .swiper-pagination-bullet {
+  width: 28px;
+  height: 3px;
+  border-radius: 0;
+  background: rgb(255 255 255 / 0.35);
+  opacity: 1;
+  transition: background-color 0.3s ease;
+  margin: 0 4px !important;
+}
+
+.hero-pagination .swiper-pagination-bullet-active {
+  background: var(--color-gold-400);
+}
+
+.testimonial-pagination .swiper-pagination-bullet {
+  background: var(--color-warm-300);
+}
+
+.testimonial-pagination .swiper-pagination-bullet-active {
+  background: var(--color-gold-500);
+}

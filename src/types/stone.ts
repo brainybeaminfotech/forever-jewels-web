@@ -1,0 +1,40 @@
+export type StoneCategory = "diamond" | "gemstone";
+export type GrowthType = "natural" | "lab-grown";
+export type StoneAvailability = "in-stock" | "unavailable";
+export type SinglePair = "single" | "pair";
+
+export interface StoneListItem {
+  id: string;
+  slug: string;
+  category: StoneCategory;
+  gemstoneType?: string;
+  shape: string;
+  caratWeight: number;
+  color?: string;
+  colorLabel?: string;
+  colorSwatch?: string;
+  clarity?: string;
+  cutGrade?: string;
+  polish?: string;
+  symmetry?: string;
+  culetSize?: string;
+  fluorescence?: string;
+  measurementsMm?: string;
+  depthPercent?: number;
+  tablePercent?: number;
+  lab?: string;
+  certificateNumber?: string;
+  growthType?: GrowthType;
+  treatment?: string;
+  origin?: string;
+  transparency?: string;
+  qualityGrade?: "A" | "AA" | "AAA" | "AAAA" | "AAAAA";
+  singlePair?: SinglePair;
+  availability: StoneAvailability;
+  pricePerCarat: number;
+  price: number;
+  compareAtPrice?: number;
+  currency: string;
+  image?: string;
+  video?: string;
+}
