@@ -11,11 +11,11 @@ const TRUST_POINTS = [
 
 export function TrustBadges() {
   return (
-    <div className="grid grid-cols-2 gap-6 border-t border-warm-200 py-8 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
+    <div className="mt-4 grid grid-cols-2 gap-y-10 gap-x-6 border-t border-warm-200 py-14 sm:grid-cols-3 lg:grid-cols-6 lg:gap-x-4">
       {TRUST_POINTS.map(({ label, icon: Icon }) => (
-        <div key={label} className="flex flex-col items-center gap-2 text-center">
-          <Icon size={22} className="text-gold-600" strokeWidth={1.5} />
-          <p className="text-xs text-warm-600">{label}</p>
+        <div key={label} className="flex flex-col items-center gap-3 text-center">
+          <Icon size={26} className="text-gold-600" strokeWidth={1.25} />
+          <p className="text-xs uppercase tracking-[0.1em] text-warm-600">{label}</p>
         </div>
       ))}
     </div>

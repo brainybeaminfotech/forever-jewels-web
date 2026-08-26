@@ -43,6 +43,12 @@ export interface ProductSpec {
   value: string;
 }
 
+/** Specs grouped under a heading, so the PDP can present them by subject. */
+export interface ProductSpecGroup {
+  title: string;
+  items: ProductSpec[];
+}
+
 /** Full photography set (every angle + turntable video) for one metal tone of a product. */
 export interface ProductMediaVariant {
   metal: MetalOptionId;
@@ -88,6 +94,8 @@ export interface Product {
   collectionSlug?: string;
   images?: string[];
   description?: string;
+  /** Full marketing copy from the API's `long_description`, shown as the PDP's lead section. */
+  longDescription?: string[];
   highlights?: string[];
   badges?: ProductBadge[];
   metalOptions?: MetalOption[];
@@ -111,6 +119,8 @@ export interface Product {
   priceMin?: number;
   priceMax?: number;
   specs?: ProductSpec[];
+  /** Preferred over `specs` on the PDP when present; `specs` stays the flat fallback. */
+  specGroups?: ProductSpecGroup[];
   careInstructions?: string[];
   reviewsList?: ProductReview[];
   relatedIds?: string[];

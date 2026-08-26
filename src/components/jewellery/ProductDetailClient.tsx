@@ -12,9 +12,11 @@ import type { MetalOptionId, Product, ProductMediaVariant } from "@/types";
 
 interface ProductDetailClientProps {
   product: Product;
+  /** Supplied by API-backed pages; falls back to the static catalog when omitted. */
+  related?: Product[];
 }
 
-export function ProductDetailClient({ product }: ProductDetailClientProps) {
+export function ProductDetailClient({ product, related: relatedFromProps }: ProductDetailClientProps) {
   const [metal, setMetal] = useState<MetalOptionId | undefined>(product.metalOptions?.[0]?.id);
 
   // Real per-tone photography when we have it; otherwise fall back to the legacy flat image
@@ -25,7 +27,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
     return [{ metal: product.metalOptions?.[0]?.id ?? "yellow-gold", images: [...new Set(legacy)] }];
   }, [product]);
 
-  const related = useMemo(() => getRelatedProducts(product), [product]);
+  const related = useMemo(() => relatedFromProps ?? getRelatedProducts(product), [relatedFromProps, product]);
 
   const categoryMeta = product.jewelleryCategory ? CATEGORY_META[product.jewelleryCategory] : undefined;
 

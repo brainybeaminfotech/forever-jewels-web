@@ -1,55 +1,115 @@
 import { Accordion } from "@/components/ui";
 import { FAQS } from "@/data/faq";
-import { FilterSection } from "./FilterSection";
-import type { Product } from "@/types";
+import { ProductSection } from "./ProductSection";
+import type { Product, ProductSpec } from "@/types";
 
 interface ProductAccordionsProps {
   product: Product;
 }
 
-const SHIPPING_COPY =
-  "Orders ship within 1–3 business days for ready-to-ship pieces, or per the estimated delivery window for made-to-order items. We offer free insured shipping on all orders, plus free 30-day returns on unworn, unaltered pieces in their original packaging.";
+const SHIPPING_POINTS = [
+  { term: "Dispatch", detail: "Ready-to-ship pieces leave within 1–3 business days; made-to-order follows the window shown above." },
+  { term: "Delivery", detail: "Free, fully insured, and requiring an adult signature. Packaging is unbranded for security." },
+  { term: "Returns", detail: "30 days on unworn, unaltered pieces in their original packaging with all certification." },
+  { term: "Exclusions", detail: "Bespoke commissions, engraved pieces, and non-standard resizes cannot be returned." },
+];
 
-const WARRANTY_COPY =
-  "Every piece is backed by our lifetime warranty, covering manufacturing defects, prong retipping, and rhodium replating. Complimentary cleaning and inspection is available at any Forever Jewels location for the life of the piece.";
+const WARRANTY_POINTS = [
+  { term: "Covered for life", detail: "Manufacturing defects, prong re-tipping, stone tightening, and rhodium re-plating." },
+  { term: "Complimentary", detail: "Cleaning, polishing, and inspection whenever you want it, plus one standard resizing." },
+  { term: "Not covered", detail: "Ordinary wear, accidental damage, loss, or work carried out by another jeweller." },
+];
+
+/** Two-column definition rows used by Shipping and Warranty. */
+function DetailList({ items }: { items: Array<{ term: string; detail: string }> }) {
+  return (
+    <dl className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
+      {items.map((item) => (
+        <div key={item.term}>
+          <dt className="text-xs font-medium uppercase tracking-[0.15em] text-ink">{item.term}</dt>
+          <dd className="mt-2 text-sm leading-relaxed text-warm-600">{item.detail}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function SpecTable({ items }: { items: ProductSpec[] }) {
+  return (
+    <dl className="mt-5 divide-y divide-warm-100 border-t border-warm-100">
+      {items.map((spec) => (
+        <div key={spec.label} className="flex items-baseline justify-between gap-6 py-3">
+          <dt className="text-sm text-warm-500">{spec.label}</dt>
+          <dd className="text-right text-sm text-ink">{spec.value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
 
 export function ProductAccordions({ product }: ProductAccordionsProps) {
+  // Grouped specs are preferred; `specs` is the flat fallback for catalog products that
+  // predate grouping.
+  const groups =
+    product.specGroups && product.specGroups.length > 0
+      ? product.specGroups
+      : product.specs && product.specs.length > 0
+        ? [{ title: "Product Details", items: product.specs }]
+        : [];
+
   return (
-    <div className="mt-12 border-t border-warm-200 pt-6 lg:mt-16">
-      {product.specs && product.specs.length > 0 && (
-        <FilterSection title="Product Details">
-          <dl className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
-            {product.specs.map((spec) => (
-              <div key={spec.label} className="flex items-center justify-between border-b border-warm-100 pb-2 text-sm">
-                <dt className="text-warm-500">{spec.label}</dt>
-                <dd className="text-ink">{spec.value}</dd>
-              </div>
+    <div className="mt-16 border-t border-warm-200 lg:mt-24">
+      {product.longDescription && product.longDescription.length > 0 && (
+        <ProductSection title="Description">
+          <div className="max-w-3xl space-y-5">
+            {product.longDescription.map((paragraph, index) => (
+              <p key={index} className="text-base leading-loose text-warm-600">
+                {paragraph}
+              </p>
             ))}
-          </dl>
-        </FilterSection>
+          </div>
+        </ProductSection>
+      )}
+
+      {groups.length > 0 && (
+        <ProductSection title="Specifications" description="Every measurement as recorded by our atelier.">
+          <div className="grid gap-x-14 gap-y-10 md:grid-cols-2 xl:grid-cols-3">
+            {groups.map((group) => (
+              <section key={group.title}>
+                <h3 className="text-xs font-medium uppercase tracking-[0.2em] text-gold-600">{group.title}</h3>
+                <SpecTable items={group.items} />
+              </section>
+            ))}
+          </div>
+        </ProductSection>
       )}
 
       {product.careInstructions && product.careInstructions.length > 0 && (
-        <FilterSection title="Care Instructions" defaultOpen={false}>
-          <ul className="flex flex-col gap-2 text-sm text-warm-600">
-            {product.careInstructions.map((c) => (
-              <li key={c}>&bull; {c}</li>
+        <ProductSection title="Care Instructions" defaultOpen={false}>
+          <ul className="grid max-w-3xl gap-3 sm:grid-cols-2">
+            {product.careInstructions.map((instruction) => (
+              <li key={instruction} className="flex gap-3 text-sm leading-relaxed text-warm-600">
+                <span aria-hidden className="mt-2 h-1 w-1 shrink-0 bg-gold-500" />
+                {instruction}
+              </li>
             ))}
           </ul>
-        </FilterSection>
+        </ProductSection>
       )}
 
-      <FilterSection title="Shipping & Returns" defaultOpen={false}>
-        <p className="text-sm text-warm-600">{SHIPPING_COPY}</p>
-      </FilterSection>
+      <ProductSection title="Shipping & Returns" defaultOpen={false}>
+        <DetailList items={SHIPPING_POINTS} />
+      </ProductSection>
 
-      <FilterSection title="Warranty" defaultOpen={false}>
-        <p className="text-sm text-warm-600">{WARRANTY_COPY}</p>
-      </FilterSection>
+      <ProductSection title="Warranty" defaultOpen={false}>
+        <DetailList items={WARRANTY_POINTS} />
+      </ProductSection>
 
-      <FilterSection title="Frequently Asked Questions" defaultOpen={false}>
-        <Accordion items={FAQS} />
-      </FilterSection>
+      <ProductSection title="Frequently Asked Questions" defaultOpen={false}>
+        <div className="max-w-3xl">
+          <Accordion items={FAQS} />
+        </div>
+      </ProductSection>
     </div>
   );
 }

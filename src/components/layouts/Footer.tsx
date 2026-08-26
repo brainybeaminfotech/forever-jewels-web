@@ -14,10 +14,11 @@ import {
 } from "@/components/ui";
 import { SITE, SOCIAL_LINKS } from "@/constants/site";
 import { CATEGORIES } from "@/data/categories";
+import { categoryHref } from "@/lib/catalog";
 
 const companyLinks = [
   { label: "About Us", href: "/about" },
-  { label: "Our Story", href: "/about#story" },
+  { label: "Our Story", href: "/our-story" },
   { label: "Contact Us", href: "/contact" },
   { label: "Careers", href: "/careers" },
   { label: "Terms & Conditions", href: "/terms" },
@@ -101,7 +102,7 @@ export function Footer() {
               {CATEGORIES.slice(0, 6).map((category) => (
                 <li key={category.id}>
                   <Link
-                    href={`/collections/${category.slug}`}
+                    href={categoryHref(category.slug)}
                     className="text-sm text-white/60 transition-colors hover:text-gold-400"
                   >
                     {category.title}

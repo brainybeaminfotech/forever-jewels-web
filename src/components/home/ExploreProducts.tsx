@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { CATEGORIES } from "@/data/categories";
+import { categoryHref } from "@/lib/catalog";
 import { Container, SectionHeading } from "@/components/common";
 import { cn } from "@/lib/utils";
 
@@ -49,7 +50,7 @@ export function ExploreProducts() {
             return (
               <Link
                 key={category.id}
-                href={`/collections/${category.slug}`}
+                href={categoryHref(category.slug)}
                 onMouseEnter={() => setActiveId(category.id)}
                 onFocus={() => setActiveId(category.id)}
                 className={cn(
@@ -103,7 +104,7 @@ export function ExploreProducts() {
           {EXPLORE_CATEGORIES.map((category) => (
             <Link
               key={category.id}
-              href={`/collections/${category.slug}`}
+              href={categoryHref(category.slug)}
               className="group relative aspect-3/4 overflow-hidden bg-warm-200"
             >
               <Image

@@ -14,7 +14,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     eyebrow: "The Forever Jewels Edit",
     title: "Emotions, Crafted in Gold",
     subtitle: "Certified diamonds. Hand-finished settings. Made to be treasured for generations.",
-    ctaPrimary: { label: "Explore Collections", href: "/collections" },
+    ctaPrimary: { label: "Explore Collections", href: "/jewellery" },
     ctaSecondary: { label: "Book a Consultation", href: "/book-appointment" },
   },
   {
@@ -25,7 +25,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     eyebrow: "Signature Engagement",
     title: "A Promise, Set in Stone",
     subtitle: "GIA-certified center stones, chosen one by one for exceptional fire and clarity.",
-    ctaPrimary: { label: "Shop Engagement Rings", href: "/engagement" },
+    ctaPrimary: { label: "Shop Engagement Rings", href: "/jewellery/rings" },
     ctaSecondary: { label: "Learn About Diamonds", href: "/diamonds" },
   },
 ];

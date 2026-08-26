@@ -18,6 +18,12 @@ interface CartLine {
 
 interface CommerceState {
   wishlist: string[];
+  /**
+   * Product snapshots for wishlisted items, keyed by id. Products now come from the API,
+   * so ids alone are not enough to render the wishlist page without refetching each one —
+   * callers that have the product pass it in and we keep a copy.
+   */
+  wishlistItems: Record<string, Product>;
   cart: CartLine[];
   compare: string[];
 }
@@ -29,10 +35,15 @@ interface CommerceContextValue {
   cart: CartLine[];
   cartCount: number;
   compare: string[];
+  wishlistItems: Product[];
   isWishlisted: (productId: string) => boolean;
-  toggleWishlist: (productId: string) => void;
+  toggleWishlist: (productId: string, product?: Product) => void;
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
+  moveToCart: (productId: string) => void;
+  clearCart: () => void;
+  cartSubtotal: number;
   isCompared: (productId: string) => boolean;
   toggleCompare: (productId: string) => void;
   clearCompare: () => void;
@@ -43,7 +54,7 @@ const STORAGE_KEY = "forever-jewels-commerce";
 const CommerceContext = createContext<CommerceContextValue | null>(null);
 
 export function CommerceProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<CommerceState>({ wishlist: [], cart: [], compare: [] });
+  const [state, setState] = useState<CommerceState>({ wishlist: [], wishlistItems: {}, cart: [], compare: [] });
 
   useEffect(() => {
     // Read persisted state after mount only — matching the server-rendered
@@ -61,13 +72,16 @@ export function CommerceProvider({ children }: { children: ReactNode }) {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
-  const toggleWishlist = useCallback((productId: string) => {
-    setState((prev) => ({
-      ...prev,
-      wishlist: prev.wishlist.includes(productId)
-        ? prev.wishlist.filter((id) => id !== productId)
-        : [...prev.wishlist, productId],
-    }));
+  const toggleWishlist = useCallback((productId: string, product?: Product) => {
+    setState((prev) => {
+      const items = { ...prev.wishlistItems };
+      if (prev.wishlist.includes(productId)) {
+        delete items[productId];
+        return { ...prev, wishlist: prev.wishlist.filter((id) => id !== productId), wishlistItems: items };
+      }
+      if (product) items[productId] = product;
+      return { ...prev, wishlist: [...prev.wishlist, productId], wishlistItems: items };
+    });
   }, []);
 
   const addToCart = useCallback((product: Product, quantity = 1) => {
@@ -88,6 +102,36 @@ export function CommerceProvider({ children }: { children: ReactNode }) {
       cart: prev.cart.filter((line) => line.product.id !== productId),
     }));
   }, []);
+
+  const updateQuantity = useCallback((productId: string, quantity: number) => {
+    setState((prev) => ({
+      ...prev,
+      cart:
+        quantity <= 0
+          ? prev.cart.filter((line) => line.product.id !== productId)
+          : prev.cart.map((line) => (line.product.id === productId ? { ...line, quantity } : line)),
+    }));
+  }, []);
+
+  const moveToCart = useCallback((productId: string) => {
+    setState((prev) => {
+      const product = prev.wishlistItems[productId];
+      if (!product) return prev;
+      const existing = prev.cart.find((line) => line.product.id === productId);
+      const items = { ...prev.wishlistItems };
+      delete items[productId];
+      return {
+        ...prev,
+        wishlist: prev.wishlist.filter((id) => id !== productId),
+        wishlistItems: items,
+        cart: existing
+          ? prev.cart.map((line) => (line.product.id === productId ? { ...line, quantity: line.quantity + 1 } : line))
+          : [...prev.cart, { product, quantity: 1 }],
+      };
+    });
+  }, []);
+
+  const clearCart = useCallback(() => setState((prev) => ({ ...prev, cart: [] })), []);
 
   const isWishlisted = useCallback(
     (productId: string) => state.wishlist.includes(productId),
@@ -118,16 +162,35 @@ export function CommerceProvider({ children }: { children: ReactNode }) {
       wishlist: state.wishlist,
       cart: state.cart,
       cartCount: state.cart.reduce((sum, line) => sum + line.quantity, 0),
+      cartSubtotal: state.cart.reduce((sum, line) => sum + line.product.price * line.quantity, 0),
+      wishlistItems: state.wishlist
+        .map((id) => state.wishlistItems[id])
+        .filter((product): product is Product => Boolean(product)),
       compare: state.compare,
       isWishlisted,
       toggleWishlist,
       addToCart,
       removeFromCart,
+      updateQuantity,
+      moveToCart,
+      clearCart,
       isCompared,
       toggleCompare,
       clearCompare,
     }),
-    [state, isWishlisted, toggleWishlist, addToCart, removeFromCart, isCompared, toggleCompare, clearCompare]
+    [
+      state,
+      isWishlisted,
+      toggleWishlist,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      moveToCart,
+      clearCart,
+      isCompared,
+      toggleCompare,
+      clearCompare,
+    ]
   );
 
   return <CommerceContext.Provider value={value}>{children}</CommerceContext.Provider>;

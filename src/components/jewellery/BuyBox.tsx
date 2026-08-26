@@ -1,13 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Check, Heart, MessageSquareText, Minus, Plus, Share2, Truck } from "lucide-react";
+import { Check, Heart, Minus, Plus, Share2, ShoppingBag, Truck } from "lucide-react";
 import { Button } from "@/components/ui";
 import { useCommerce } from "@/hooks/useCommerce";
 import { formatPrice } from "@/utils/format";
 import { cn } from "@/lib/utils";
-import { SITE } from "@/constants/site";
 import type { MetalOptionId, Product } from "@/types";
 
 interface BuyBoxProps {
@@ -24,14 +24,16 @@ const HIDDEN_HIGHLIGHTS = new Set([
 ]);
 
 function estimateDelivery(readyToShip?: boolean, availability?: Product["availability"]) {
-  const days = readyToShip ? 3 : availability === "made-to-order" ? 18 : 7;
+  const days = readyToShip ? 7 : availability === "made-to-order" ? 20 : 15;
   const date = new Date(Date.now() + days * 86400000);
   const label = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
   return { days, label };
 }
 
 export function BuyBox({ product, metal, onMetalChange }: BuyBoxProps) {
-  const { isWishlisted, toggleWishlist } = useCommerce();
+  const { isWishlisted, toggleWishlist, addToCart } = useCommerce();
+  const router = useRouter();
+  const [added, setAdded] = useState(false);
   const [size, setSize] = useState(product.sizes?.[0]);
   const [quality, setQuality] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -45,7 +47,6 @@ export function BuyBox({ product, metal, onMetalChange }: BuyBoxProps) {
     [product.highlights]
   );
   const delivery = useMemo(() => estimateDelivery(product.readyToShip, product.availability), [product.readyToShip, product.availability]);
-  const monthly = Math.round(product.price / 12);
 
   const qualityTiers = product.diamondType
     ? [
@@ -55,9 +56,18 @@ export function BuyBox({ product, metal, onMetalChange }: BuyBoxProps) {
       ]
     : [];
 
-  const inquiryHref = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(
-    `Hello Forever Jewels, I'd like to inquire about the ${product.name} (Qty: ${quantity}).`
-  )}`;
+  const isOutOfStock = product.availability === "out-of-stock";
+
+  function handleAddToCart() {
+    addToCart(product, quantity);
+    setAdded(true);
+    window.setTimeout(() => setAdded(false), 2000);
+  }
+
+  function handleBuyNow() {
+    addToCart(product, quantity);
+    router.push("/cart");
+  }
 
   async function handleShare() {
     const url = typeof window !== "undefined" ? window.location.href : `/products/${product.slug}`;
@@ -85,7 +95,7 @@ export function BuyBox({ product, metal, onMetalChange }: BuyBoxProps) {
         <div className="flex shrink-0 items-center gap-1">
           <button
             type="button"
-            onClick={() => toggleWishlist(product.id)}
+            onClick={() => toggleWishlist(product.id, product)}
             aria-label={wishlisted ? "Remove from saved items" : "Save this item"}
             aria-pressed={wishlisted}
             className="flex h-10 w-10 items-center justify-center rounded-full text-ink transition-colors hover:bg-warm-100 hover:text-red-500"
@@ -125,9 +135,6 @@ export function BuyBox({ product, metal, onMetalChange }: BuyBoxProps) {
       {product.priceMax && product.priceMax > product.price && (
         <p className="mt-1 text-xs text-warm-500">Price varies by selection, up to {formatPrice(product.priceMax, product.currency)}</p>
       )}
-      <p className="mt-1 text-xs text-warm-500">
-        or as low as <span className="text-ink">{formatPrice(monthly, product.currency)}/mo</span> with 0% APR financing
-      </p>
 
       {product.metalOptions && product.metalOptions.length > 0 && (
         <div className="mt-6">
@@ -252,17 +259,19 @@ export function BuyBox({ product, metal, onMetalChange }: BuyBoxProps) {
         )}
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 flex flex-col gap-3">
         <Button
           variant="primary"
           size="lg"
           fullWidth
-          icon={<MessageSquareText size={16} />}
-          href={inquiryHref}
-          target="_blank"
-          rel="noopener noreferrer"
+          icon={<ShoppingBag size={16} />}
+          onClick={handleAddToCart}
+          disabled={isOutOfStock}
         >
-          Inquiry Now
+          {added ? "Added to Bag" : "Add to Bag"}
+        </Button>
+        <Button variant="outline" size="lg" fullWidth onClick={handleBuyNow} disabled={isOutOfStock}>
+          Buy Now
         </Button>
       </div>
 

@@ -8,3 +8,4 @@ export * from "./nav";
 export * from "./hero";
 export * from "./stone";
 export * from "./account";
+export * from "./content";

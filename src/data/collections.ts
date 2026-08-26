@@ -11,7 +11,7 @@ export const SIGNATURE_COLLECTIONS: Collection[] = [
       "An openwork lattice of pavé diamonds wraps the wrist in continuous brilliance — bold enough for evening, refined enough for every day.",
     image: IMAGES.collections[0]!,
     ctaLabel: "Shop Bangles",
-    href: "/collections/bracelets",
+    href: "/jewellery/bracelets",
     piecesCount: 18,
   },
   {
@@ -23,7 +23,7 @@ export const SIGNATURE_COLLECTIONS: Collection[] = [
       "A single freshwater pearl meets a bypass of pavé diamonds in rose gold — a modern take on a design passed down for generations.",
     image: IMAGES.collections[1]!,
     ctaLabel: "Shop Bracelets",
-    href: "/collections/bracelets",
+    href: "/jewellery/bracelets",
     piecesCount: 22,
   },
   {
@@ -35,7 +35,7 @@ export const SIGNATURE_COLLECTIONS: Collection[] = [
       "A single brilliant-cut diamond, halo-set in gold and finished on a fine chain — clean lines designed for daily wear without ever compromising on brilliance.",
     image: IMAGES.collections[2]!,
     ctaLabel: "Shop Necklaces",
-    href: "/collections/necklaces",
+    href: "/jewellery/necklaces",
     piecesCount: 41,
   },
   {
@@ -47,7 +47,7 @@ export const SIGNATURE_COLLECTIONS: Collection[] = [
       "Pavé-set star pendants in polished gold — a lighter, whimsical layer for stacking necklaces or wearing on their own.",
     image: IMAGES.collections[3]!,
     ctaLabel: "Shop Pendants",
-    href: "/collections/pendants",
+    href: "/jewellery/pendants",
     piecesCount: 15,
   },
 ];

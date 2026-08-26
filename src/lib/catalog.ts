@@ -48,6 +48,30 @@ export const CATEGORY_META: Record<JewelleryCategorySlug, CategoryMeta> = {
   },
 };
 
+/**
+ * Marketing category slug → its live listing route.
+ *
+ * The site's marketing copy uses slugs (`engagement-rings`, `wedding-rings`,
+ * `custom-jewellery`) that have no listing page of their own — only the five
+ * `JewelleryCategorySlug` values do. Everything linking to a category must go through
+ * here; hand-written `/collections/{slug}` hrefs were 404s, since `/collections` is not
+ * a route in this app at all.
+ */
+export function categoryHref(slug: string): string {
+  if (isJewelleryCategory(slug)) return `/jewellery/${slug}`;
+
+  switch (slug) {
+    case "engagement-rings":
+    case "wedding-rings":
+      return "/jewellery/rings";
+    case "custom-jewellery":
+      // No listing exists for bespoke work — commissions start with a conversation.
+      return "/contact";
+    default:
+      return "/jewellery";
+  }
+}
+
 export function isJewelleryCategory(value: string): value is JewelleryCategorySlug {
   return (JEWELLERY_CATEGORIES as string[]).includes(value);
 }

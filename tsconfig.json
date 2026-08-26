@@ -27,6 +27,12 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@framework/*": [
+        "./src/framework/basic-rest/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
       ]
     }
   },

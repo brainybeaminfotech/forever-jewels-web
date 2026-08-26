@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Heart, ShoppingBag, UserRound, Menu, ChevronDown, MapPin, Phone, X, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -12,11 +12,19 @@ import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useCommerce } from "@/hooks/useCommerce";
 import { MAIN_NAVIGATION } from "@/data/navigation";
-import { NEW_ARRIVALS } from "@/data/products";
 import { SITE } from "@/constants/site";
 import { Logo } from "@/components/common";
 import { MobileMenu } from "./MobileMenu";
 import { MegaMenuPanel } from "./MegaMenuPanel";
+import type { SearchHit } from "@framework/product/get-search-products";
+
+/**
+ * Temporarily hidden: multi-currency is switched off in the header until the backend
+ * supports it — every catalog request is made in USD today, so offering other currencies
+ * would show prices that were never converted. Flip to `true` to restore the switcher;
+ * the markup below is kept intact for that reason rather than deleted.
+ */
+const SHOW_CURRENCY_SWITCHER: boolean = false;
 
 const CURRENCIES = [
   { code: "USD", symbol: "$" },
@@ -28,6 +36,7 @@ const CURRENCIES = [
 
 export function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const isHome = pathname === "/";
   const scrolled = useScrollPosition(60);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -37,7 +46,7 @@ export function Header() {
   const [currency, setCurrency] = useState(CURRENCIES[0]!);
   const { wishlist, cartCount } = useCommerce();
   const navRef = useRef<HTMLDivElement>(null);
-  const desktopSearchRef = useRef<HTMLDivElement>(null);
+  const desktopSearchRef = useRef<HTMLFormElement>(null);
   const mobileSearchRef = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -45,13 +54,46 @@ export function Header() {
   useClickOutside(desktopSearchRef, () => searchOpen && closeSearch());
   useClickOutside(mobileSearchRef, () => searchOpen && closeSearch());
 
-  const query = searchQuery.trim().toLowerCase();
-  const searchResults = useMemo(() => {
-    if (!query) return [];
-    return NEW_ARRIVALS.filter(
-      (product) => product.name.toLowerCase().includes(query) || product.category.toLowerCase().includes(query)
-    ).slice(0, 6);
+  const query = searchQuery.trim();
+  const [searchResults, setSearchResults] = useState<SearchHit[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+
+  // Debounced live search against the catalog API, proxied through /api/search so the
+  // request stays server-side (the REST host is plain http in some environments).
+  useEffect(() => {
+    // No synchronous setState here — the short-query case is derived at render below
+    // (`visibleResults`), which keeps this effect purely a subscription to the fetch.
+    if (query.length < 2) return;
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      setSearchLoading(true);
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, { signal: controller.signal });
+        const data = (await response.json()) as { results?: SearchHit[] };
+        setSearchResults(data.results ?? []);
+      } catch {
+        // An aborted request is the normal case while typing — leave prior results alone.
+      } finally {
+        if (!controller.signal.aborted) setSearchLoading(false);
+      }
+    }, 300);
+
+    return () => {
+      controller.abort();
+      clearTimeout(timer);
+    };
   }, [query]);
+
+  // Results only belong to queries long enough to have been searched.
+  const visibleResults = query.length >= 2 ? searchResults : [];
+
+  function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (query.length < 2) return;
+    closeSearch();
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+  }
 
   function closeSearch() {
     setSearchOpen(false);
@@ -60,11 +102,17 @@ export function Header() {
 
   function renderSearchResults() {
     if (query === "") return null;
+    if (query.length < 2) {
+      return <p className="p-4 text-sm text-warm-500">Keep typing to search…</p>;
+    }
+    if (searchLoading && visibleResults.length === 0) {
+      return <p className="p-4 text-sm text-warm-500">Searching…</p>;
+    }
     return (
       <div className="max-h-[70vh] overflow-y-auto p-4">
-        {searchResults.length > 0 ? (
+        {visibleResults.length > 0 ? (
           <div className="flex flex-col">
-            {searchResults.map((product) => (
+            {visibleResults.map((product) => (
               <Link
                 key={product.id}
                 href={`/products/${product.slug}`}
@@ -77,7 +125,7 @@ export function Header() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-ink group-hover:text-gold-600">{product.name}</p>
                   <p className="truncate text-xs text-warm-500">
-                    {product.category} &middot; {formatPrice(product.price, product.currency)}
+                    {product.category} &middot; {formatPrice(product.price, currency.code)}
                   </p>
                 </div>
                 <ArrowUpRight size={14} className="shrink-0 text-warm-400 transition-colors group-hover:text-gold-600" />
@@ -123,7 +171,7 @@ export function Header() {
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="absolute right-0 top-full z-50 mt-3 w-[90vw] max-w-sm border border-warm-200 bg-white text-ink shadow-luxury-lg"
           >
-            <div className="flex items-center gap-3 border-b border-warm-200 px-4 py-3">
+            <form onSubmit={handleSearchSubmit} className="flex items-center gap-3 border-b border-warm-200 px-4 py-3">
               <Search size={18} className="shrink-0 text-warm-400" />
               <input
                 autoFocus
@@ -142,7 +190,7 @@ export function Header() {
               >
                 <X size={18} />
               </button>
-            </div>
+            </form>
             {renderSearchResults()}
           </motion.div>
         )}
@@ -185,28 +233,30 @@ export function Header() {
               </a>
             </div>
             <div className={cn("flex items-center gap-6", textTone)}>
-              <div className="group relative">
-                <button type="button" className="flex items-center gap-1 hover:text-gold-500">
-                  {currency.code} {currency.symbol}
-                  <ChevronDown size={12} />
-                </button>
-                <div className="invisible absolute left-0 top-full z-50 mt-2 w-32 border border-warm-200 bg-white text-ink opacity-0 shadow-luxury transition-all duration-200 group-hover:visible group-hover:opacity-100">
-                  {CURRENCIES.map((item) => (
-                    <button
-                      key={item.code}
-                      type="button"
-                      onClick={() => setCurrency(item)}
-                      className={cn(
-                        "flex w-full items-center justify-between px-3 py-2 text-left text-xs hover:bg-warm-100 hover:text-gold-600",
-                        currency.code === item.code && "text-gold-600"
-                      )}
-                    >
-                      <span>{item.code}</span>
-                      <span>{item.symbol}</span>
-                    </button>
-                  ))}
+              {SHOW_CURRENCY_SWITCHER && (
+                <div className="group relative">
+                  <button type="button" className="flex items-center gap-1 hover:text-gold-500">
+                    {currency.code} {currency.symbol}
+                    <ChevronDown size={12} />
+                  </button>
+                  <div className="invisible absolute left-0 top-full z-50 mt-2 w-32 border border-warm-200 bg-white text-ink opacity-0 shadow-luxury transition-all duration-200 group-hover:visible group-hover:opacity-100">
+                    {CURRENCIES.map((item) => (
+                      <button
+                        key={item.code}
+                        type="button"
+                        onClick={() => setCurrency(item)}
+                        className={cn(
+                          "flex w-full items-center justify-between px-3 py-2 text-left text-xs hover:bg-warm-100 hover:text-gold-600",
+                          currency.code === item.code && "text-gold-600"
+                        )}
+                      >
+                        <span>{item.code}</span>
+                        <span>{item.symbol}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
               <Link href="/login" className="hover:text-gold-500">
                 Login
               </Link>
@@ -229,7 +279,11 @@ export function Header() {
               <Menu size={24} />
             </button>
 
-            <div ref={desktopSearchRef} className={cn("relative hidden items-center gap-2 lg:flex", textTone)}>
+            <form
+              ref={desktopSearchRef}
+              onSubmit={handleSearchSubmit}
+              className={cn("relative hidden items-center gap-2 lg:flex", textTone)}
+            >
               <Search size={16} className="shrink-0" />
               <input
                 type="text"
@@ -249,7 +303,7 @@ export function Header() {
                 </button>
               )}
               {renderSearchDropdown("left")}
-            </div>
+            </form>
           </div>
 
           <Logo theme={solid ? "dark" : "light"} />
@@ -329,8 +383,10 @@ export function Header() {
                   onMouseLeave={scheduleClose}
                   className="absolute inset-x-0 top-full"
                 >
-                  <div className="mx-auto max-w-360 px-8 xl:px-12">
-                    <div className="border border-warm-200 bg-white shadow-luxury-lg">
+                  {/* Centred and shrink-wrapped: the panel is only as wide as its
+                      content, so a menu with fewer columns has no trailing white space. */}
+                  <div className="mx-auto flex max-w-360 justify-center px-8 xl:px-12">
+                    <div className="max-w-full border border-warm-200 bg-white shadow-luxury-lg">
                       {menuItem.megaMenu ? (
                         <MegaMenuPanel menu={menuItem.megaMenu} onNavigate={() => setActiveMenu(null)} />
                       ) : (

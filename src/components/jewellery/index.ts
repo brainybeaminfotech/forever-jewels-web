@@ -1,5 +1,6 @@
 export * from "./ListingClient";
 export * from "./FilterSection";
+export * from "./ProductSection";
 export * from "./FilterPanelContent";
 export * from "./FilterDrawer";
 export * from "./ActiveFilterChips";

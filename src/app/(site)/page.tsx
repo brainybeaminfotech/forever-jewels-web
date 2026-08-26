@@ -8,7 +8,6 @@ import {
   Testimonials,
   Blogs,
   FAQs,
-  InstagramGallery,
   MarketingPopup,
 } from "@/components/home";
 
@@ -29,7 +28,6 @@ export default function HomePage() {
       <Testimonials />
       <Blogs />
       <FAQs />
-      <InstagramGallery />
       <MarketingPopup />
     </>
   );

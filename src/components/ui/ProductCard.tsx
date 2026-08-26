@@ -113,7 +113,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
         <div className="absolute right-3 top-3 flex translate-y-1 flex-col gap-2 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
           <button
             type="button"
-            onClick={() => toggleWishlist(product.id)}
+            onClick={() => toggleWishlist(product.id, product)}
             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
             aria-pressed={wishlisted}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-ink shadow-sm backdrop-blur transition-transform duration-300 hover:scale-110"

@@ -20,14 +20,6 @@ export const MAIN_NAVIGATION: NavItem[] = [
       ],
       columns: [
         {
-          heading: "Create Your Own Ring",
-          links: [
-            { label: "Start With An Earth-Mined Diamond", href: "/diamonds/natural", icon: "diamond-earth" },
-            { label: "Start With A Lab-Grown Diamond", href: "/diamonds/lab-grown", icon: "diamond-lab" },
-            { label: "Start With A Setting", href: "/design-your-own", icon: "setting" },
-          ],
-        },
-        {
           heading: "Learn About",
           links: [
             { label: "Diamond Shapes", href: "/education/diamond-shapes" },
@@ -56,15 +48,6 @@ export const MAIN_NAVIGATION: NavItem[] = [
             { label: "Pearl", href: "/gemstone/pearl" },
             { label: "Topaz", href: "/gemstone/topaz" },
             { label: "Amethyst", href: "/gemstone/amethyst" },
-          ],
-        },
-        {
-          heading: "Shop By Jewellery",
-          links: [
-            { label: "Gemstone Rings", href: "/gemstone/rings" },
-            { label: "Gemstone Earrings", href: "/gemstone/earrings" },
-            { label: "Gemstone Necklaces", href: "/gemstone/necklaces" },
-            { label: "Gemstone Bracelets", href: "/gemstone/bracelets" },
           ],
         },
         {
@@ -98,14 +81,6 @@ export const MAIN_NAVIGATION: NavItem[] = [
           ],
         },
         {
-          heading: "Shop By Occasion",
-          links: [
-            { label: "Everyday", href: "/jewellery/everyday" },
-            { label: "Gifting", href: "/jewellery/gifting" },
-            { label: "Bridal", href: "/jewellery/bridal" },
-          ],
-        },
-        {
           heading: "Learn About",
           links: [
             { label: "Jewellery Care Guide", href: "/education/jewellery-care" },
@@ -121,7 +96,7 @@ export const MAIN_NAVIGATION: NavItem[] = [
     },
   },
   { label: "Education", href: "/education" },
-  { label: "Create Your Own", href: "/design-your-own" },
+  { label: "Ring Configurator", href: "/ring-configurator" },
 ];
 
 export const MOBILE_UTILITY_LINKS: NavItem[] = [
