@@ -5,6 +5,8 @@ export interface NavChild {
   href: string;
   description?: string;
   icon?: NavLinkIcon;
+  /** Finer-grained sub-links shown in a flyout when this link is hovered/focused (desktop) or as a nested accordion level (mobile). */
+  children?: NavChild[];
 }
 
 export type DiamondShape =

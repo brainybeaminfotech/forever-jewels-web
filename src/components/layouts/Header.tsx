@@ -274,7 +274,7 @@ export function Header() {
               type="button"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
-              className={cn(textTone, "lg:hidden")}
+              className={cn("inline-flex items-center leading-none", textTone, "lg:hidden")}
             >
               <Menu size={24} />
             </button>
@@ -314,13 +314,17 @@ export function Header() {
                 type="button"
                 onClick={() => (searchOpen ? closeSearch() : setSearchOpen(true))}
                 aria-label="Toggle search"
-                className={textTone}
+                className={cn("inline-flex items-center leading-none", textTone)}
               >
                 <Search size={20} />
               </button>
               {renderMobileSearchDropdown()}
             </div>
-            <Link href="/wishlist" aria-label="Wishlist" className={cn("relative hover:text-gold-500", textTone)}>
+            <Link
+              href="/wishlist"
+              aria-label="Wishlist"
+              className={cn("relative hidden items-center leading-none hover:text-gold-500 lg:inline-flex", textTone)}
+            >
               <Heart size={20} />
               {wishlist.length > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold-500 px-1 text-[10px] font-semibold text-ink">
@@ -328,7 +332,10 @@ export function Header() {
                 </span>
               )}
             </Link>
-            <Link href="/cart" aria-label="Cart" className={cn("relative hover:text-gold-500", textTone)}>
+            <Link
+              href="/cart"
+              aria-label="Cart"
+              className={cn("relative hidden items-center leading-none hover:text-gold-500 lg:inline-flex", textTone)}>
               <ShoppingBag size={20} />
               {cartCount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold-500 px-1 text-[10px] font-semibold text-ink">
@@ -336,7 +343,11 @@ export function Header() {
                 </span>
               )}
             </Link>
-            <Link href="/account" aria-label="Account" className={cn("hidden hover:text-gold-500 sm:inline-flex", textTone)}>
+            <Link
+              href="/account"
+              aria-label="Account"
+              className={cn("hidden items-center leading-none hover:text-gold-500 sm:inline-flex", textTone)}
+            >
               <UserRound size={20} />
             </Link>
           </div>

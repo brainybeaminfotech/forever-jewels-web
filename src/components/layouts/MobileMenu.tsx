@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Diamond, Phone, Mail, X, LogIn, UserPlus, UserRound } from "lucide-react";
+import { ChevronDown, Diamond, Heart, Phone, Mail, ShoppingBag, X, LogIn, UserPlus, UserRound } from "lucide-react";
 import { MAIN_NAVIGATION, MOBILE_UTILITY_LINKS } from "@/data/navigation";
 import { SITE, SOCIAL_LINKS } from "@/constants/site";
 import { DiamondShapeIcon, Logo } from "@/components/common";
+import { useCommerce } from "@/hooks/useCommerce";
 
 interface MobileMenuProps {
   open: boolean;
@@ -15,6 +16,8 @@ interface MobileMenuProps {
 
 export function MobileMenu({ open, onClose }: MobileMenuProps) {
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [expandedSub, setExpandedSub] = useState<string | null>(null);
+  const { wishlist, cartCount } = useCommerce();
 
   return (
     <AnimatePresence>
@@ -131,17 +134,61 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                                   {column.heading}
                                 </p>
                                 <div className="mt-3 flex flex-col gap-3">
-                                  {column.links.map((link) => (
-                                    <Link
-                                      key={link.label}
-                                      href={link.href}
-                                      onClick={onClose}
-                                      className="flex items-center gap-2 text-sm text-warm-600 hover:text-gold-600"
-                                    >
-                                      {link.icon && <Diamond size={16} strokeWidth={1} className="shrink-0 text-warm-400" />}
-                                      {link.label}
-                                    </Link>
-                                  ))}
+                                  {column.links.map((link) => {
+                                    const isSubExpanded = expandedSub === link.label;
+                                    return (
+                                      <div key={link.label}>
+                                        <div className="flex items-center justify-between">
+                                          <Link
+                                            href={link.href}
+                                            onClick={onClose}
+                                            className="flex items-center gap-2 text-sm text-warm-600 hover:text-gold-600"
+                                          >
+                                            {link.icon && (
+                                              <Diamond size={16} strokeWidth={1} className="shrink-0 text-warm-400" />
+                                            )}
+                                            {link.label}
+                                          </Link>
+                                          {link.children && link.children.length > 0 && (
+                                            <button
+                                              type="button"
+                                              aria-label={`Toggle ${link.label} submenu`}
+                                              aria-expanded={isSubExpanded}
+                                              onClick={() => setExpandedSub(isSubExpanded ? null : link.label)}
+                                              className="flex h-7 w-7 items-center justify-center text-warm-500"
+                                            >
+                                              <motion.span animate={{ rotate: isSubExpanded ? 180 : 0 }}>
+                                                <ChevronDown size={14} />
+                                              </motion.span>
+                                            </button>
+                                          )}
+                                        </div>
+                                        <AnimatePresence initial={false}>
+                                          {link.children && isSubExpanded && (
+                                            <motion.div
+                                              initial={{ height: 0, opacity: 0 }}
+                                              animate={{ height: "auto", opacity: 1 }}
+                                              exit={{ height: 0, opacity: 0 }}
+                                              className="overflow-hidden"
+                                            >
+                                              <div className="mt-3 flex flex-col gap-3 pl-4">
+                                                {link.children.map((child) => (
+                                                  <Link
+                                                    key={child.label}
+                                                    href={child.href}
+                                                    onClick={onClose}
+                                                    className="text-sm text-warm-600 hover:text-gold-600"
+                                                  >
+                                                    {child.label}
+                                                  </Link>
+                                                ))}
+                                              </div>
+                                            </motion.div>
+                                          )}
+                                        </AnimatePresence>
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               </div>
                             ))}
@@ -168,6 +215,26 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
             </div>
 
             <div className="mt-auto flex flex-col gap-4 border-t border-warm-200 px-6 py-6">
+              <Link href="/wishlist" onClick={onClose} className="flex items-center justify-between text-sm text-ink">
+                <span className="flex items-center gap-2">
+                  <Heart size={16} /> Wishlist
+                </span>
+                {wishlist.length > 0 && (
+                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-gold-500 px-1.5 text-[11px] font-semibold text-ink">
+                    {wishlist.length}
+                  </span>
+                )}
+              </Link>
+              <Link href="/cart" onClick={onClose} className="flex items-center justify-between text-sm text-ink">
+                <span className="flex items-center gap-2">
+                  <ShoppingBag size={16} /> Cart
+                </span>
+                {cartCount > 0 && (
+                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-gold-500 px-1.5 text-[11px] font-semibold text-ink">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
               <Link href="/account" onClick={onClose} className="flex items-center gap-2 text-sm text-ink">
                 <UserRound size={16} /> My Account
               </Link>

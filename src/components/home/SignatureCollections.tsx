@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 export function SignatureCollections() {
   return (
-    <section className="bg-navy py-20 sm:py-28">
+    <section className="overflow-hidden bg-navy py-20 sm:py-28">
       <Container size="wide">
         <SectionHeading
           eyebrow="Curated For You"

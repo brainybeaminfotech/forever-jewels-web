@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Diamond } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronRight, Diamond } from "lucide-react";
 import { DiamondShapeIcon } from "@/components/common";
 import { cn } from "@/lib/utils";
 import type { DiamondShape, MegaMenu, NavLinkIcon } from "@/types";
@@ -58,6 +59,7 @@ function LinkIcon({ icon }: { icon: NavLinkIcon }) {
 
 export function MegaMenuPanel({ menu, onNavigate }: MegaMenuPanelProps) {
   const [hoveredShape, setHoveredShape] = useState<DiamondShape | null>(null);
+  const [openSubLabel, setOpenSubLabel] = useState<string | null>(null);
 
   const hoveredRender = hoveredShape ? SHAPE_RENDERS[hoveredShape] : undefined;
   const hoveredLabel = menu.shapes?.find((shape) => shape.shape === hoveredShape)?.label;
@@ -94,17 +96,68 @@ export function MegaMenuPanel({ menu, onNavigate }: MegaMenuPanelProps) {
         <div key={column.heading} className="w-44 shrink-0">
           <p className="font-display text-sm uppercase tracking-[0.15em] text-ink">{column.heading}</p>
           <div className="mt-5 flex flex-col gap-4">
-            {column.links.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                onClick={onNavigate}
-                className="group flex items-center gap-3 text-sm text-warm-600 transition-colors hover:text-gold-600"
-              >
-                {link.icon && <LinkIcon icon={link.icon} />}
-                <span>{link.label}</span>
-              </Link>
-            ))}
+            {column.links.map((link) =>
+              link.children && link.children.length > 0 ? (
+                <div
+                  key={link.label}
+                  onMouseEnter={() => setOpenSubLabel(link.label)}
+                  onMouseLeave={() => setOpenSubLabel((prev) => (prev === link.label ? null : prev))}
+                >
+                  <Link
+                    href={link.href}
+                    onClick={onNavigate}
+                    onFocus={() => setOpenSubLabel(link.label)}
+                    className="group flex items-center justify-between gap-3 text-sm text-warm-600 transition-colors hover:text-gold-600"
+                  >
+                    <span className="flex items-center gap-3">
+                      {link.icon && <LinkIcon icon={link.icon} />}
+                      <span>{link.label}</span>
+                    </span>
+                    <ChevronRight
+                      size={14}
+                      className={cn(
+                        "shrink-0 text-warm-400 transition-transform duration-200",
+                        openSubLabel === link.label && "translate-x-0.5 rotate-90 text-gold-600",
+                      )}
+                    />
+                  </Link>
+                  <AnimatePresence initial={false}>
+                    {openSubLabel === link.label && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-3 flex flex-col gap-3 border-l border-warm-200 pl-4">
+                          {link.children.map((child) => (
+                            <Link
+                              key={child.label}
+                              href={child.href}
+                              onClick={onNavigate}
+                              className="text-sm text-warm-500 transition-colors hover:text-gold-600"
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  onClick={onNavigate}
+                  className="group flex items-center gap-3 text-sm text-warm-600 transition-colors hover:text-gold-600"
+                >
+                  {link.icon && <LinkIcon icon={link.icon} />}
+                  <span>{link.label}</span>
+                </Link>
+              ),
+            )}
           </div>
         </div>
       ))}

@@ -75,7 +75,16 @@ export const MAIN_NAVIGATION: NavItem[] = [
           links: [
             { label: "Rings", href: "/jewellery/rings" },
             { label: "Earrings", href: "/jewellery/earrings" },
-            { label: "Necklaces", href: "/jewellery/necklaces" },
+            {
+              label: "Necklaces",
+              href: "/jewellery/necklaces",
+              children: [
+                { label: "Single Stone Necklace", href: "/jewellery/necklaces?style=single-stone" },
+                { label: "Bezel Chains", href: "/jewellery/necklaces?style=bezel-chains" },
+                { label: "Diamond Beads", href: "/jewellery/necklaces?style=diamond-beads" },
+                { label: "Floating Diamond Chains", href: "/jewellery/necklaces?style=floating-diamond-chains" },
+              ],
+            },
             { label: "Bracelets", href: "/jewellery/bracelets" },
             { label: "Pendants", href: "/jewellery/pendants" },
           ],

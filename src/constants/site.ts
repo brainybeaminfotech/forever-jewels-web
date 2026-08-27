@@ -12,7 +12,7 @@ export const SITE = {
   phone: "+1 917 302 9312",
   phoneHref: "tel:+19173029312",
   whatsapp: "19173029312",
-  email: "hello@foreverjewelsinc.com",
+  email: "social@foreverjewelsinc.com",
   address: "2 Tower Center Blvd, 10th Fl, East Brunswick, NJ 08816 USA",
   /** Same address split for multi-line display (contact page, structured data). */
   addressLines: ["2 Tower Center Blvd, 10th Fl", "East Brunswick, NJ 08816 USA"],

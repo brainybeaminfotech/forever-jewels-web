@@ -89,7 +89,7 @@ export function BuyBox({ product, metal, onMetalChange }: BuyBoxProps) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-warm-500">{product.category}</p>
-          <h1 className="mt-2 font-display text-3xl text-ink sm:text-4xl">{product.name}</h1>
+          <h1 className="mt-2 font-display text-2xl text-ink sm:text-3xl">{product.name}</h1>
           {product.sku && <p className="mt-2 text-xs text-warm-500">SKU: {product.sku}</p>}
         </div>
         <div className="flex shrink-0 items-center gap-1">
