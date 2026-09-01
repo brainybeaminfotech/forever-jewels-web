@@ -229,7 +229,6 @@ export function normaliseProductDetail(
   if (sizes.length > 0) pieceItems.push({ label: sizes.length > 1 ? "Sizes" : "Size", value: sizes.join(", ") });
   if (detail.certificate) pieceItems.push({ label: "Certificate", value: detail.certificate });
   if (detail.is_customization === "1") pieceItems.push({ label: "Customisable", value: "Yes" });
-  if (pmo?.delivery_days) pieceItems.push({ label: "Ships In", value: String(pmo.delivery_days) });
 
   const specGroups = [
     { title: "The Stones", items: stoneItems },

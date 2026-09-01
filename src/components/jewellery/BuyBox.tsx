@@ -24,7 +24,7 @@ const HIDDEN_HIGHLIGHTS = new Set([
 ]);
 
 function estimateDelivery(readyToShip?: boolean, availability?: Product["availability"]) {
-  const days = readyToShip ? 7 : availability === "made-to-order" ? 20 : 15;
+  const days = readyToShip ? 7 : availability === "made-to-order" ? 20 : 7;
   const date = new Date(Date.now() + days * 86400000);
   const label = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
   return { days, label };
