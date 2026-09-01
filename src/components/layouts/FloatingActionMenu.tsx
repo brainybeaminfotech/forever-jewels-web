@@ -26,14 +26,6 @@ const actions = [
     external: true,
   },
   {
-    key: "schedule",
-    label: "Schedule Meeting",
-    href: CONTACT_ACTIONS.schedule,
-    icon: CalendarClock,
-    tone: "bg-gold-500 text-ink",
-    external: false,
-  },
-  {
     key: "inquiry",
     label: "Inquiry",
     href: CONTACT_ACTIONS.inquiry,
