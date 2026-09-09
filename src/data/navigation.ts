@@ -28,7 +28,7 @@ export const MAIN_NAVIGATION: NavItem[] = [
         },
       ],
       promo: {
-        image: "/images/handcrafted-primary.webp",
+        image: "/images/handcrafted-primary.png",
         alt: "Hand-selected loose diamonds",
         href: "/diamonds/loose",
       },

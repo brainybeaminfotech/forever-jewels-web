@@ -31,14 +31,14 @@ export const IMAGES = {
     "/images/product-8.jpg",
   ],
   handcrafted: {
-    primary: "/images/handcrafted-primary.webp",
-    secondary: "/images/handcrafted-secondary.webp",
+    primary: "/images/handcrafted-primary.png",
+    secondary: "/images/handcrafted-secondary.png",
   },
   collections: [
-    "/images/collection-1.webp",
-    "/images/collection-2.webp",
-    "/images/collection-3.webp",
-    "/images/collection-4.webp",
+    "/images/collection-1.png",
+    "/images/collection-2.png",
+    "/images/collection-3.png",
+    "/images/collection-4.png",
   ],
   testimonials: [
     "/images/testimonial-1.jpg",

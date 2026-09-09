@@ -80,11 +80,24 @@ export function MegaMenuPanel({ menu, onNavigate }: MegaMenuPanelProps) {
                 onFocus={() => setHoveredShape(shape.shape)}
                 className="group flex items-center gap-3 text-sm text-warm-600 transition-colors hover:text-gold-600"
               >
-                <DiamondShapeIcon
-                  shape={shape.shape}
-                  size={26}
-                  className="shrink-0 text-warm-400 transition-colors group-hover:text-gold-600"
-                />
+                {SHAPE_RENDERS[shape.shape] ? (
+                  <span className="relative h-9 w-9 shrink-0">
+                    <Image
+                      src={SHAPE_RENDERS[shape.shape]!}
+                      alt=""
+                      fill
+                      sizes="36px"
+                      className="object-contain transition-transform duration-300 group-hover:scale-110"
+                    />
+                  </span>
+                ) : (
+                  // Line-art fallback for any shape without a render.
+                  <DiamondShapeIcon
+                    shape={shape.shape}
+                    size={26}
+                    className="shrink-0 text-warm-400 transition-colors group-hover:text-gold-600"
+                  />
+                )}
                 {shape.label}
               </Link>
             ))}
