@@ -7,11 +7,13 @@ import { FadeIn } from "@/components/animations";
 import { STORY_TIMELINE } from "@/data/company";
 import { SITE } from "@/constants/site";
 import { IMAGES } from "@/lib/images";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Our Story",
   description: `From a single workbench in ${SITE.founded} to a full New Jersey atelier — the story of how ${SITE.name} came to be, told in the decisions that shaped it.`,
-};
+  path: "/our-story",
+});
 
 export default function OurStoryPage() {
   return (

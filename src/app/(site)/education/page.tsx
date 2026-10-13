@@ -8,11 +8,13 @@ import { Button } from "@/components/ui";
 import { FadeIn } from "@/components/animations";
 import { EDUCATION_ARTICLES, EDUCATION_CATEGORIES, getEducationArticlesByCategory } from "@/data/education";
 import { SITE } from "@/constants/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Diamond & Jewellery Education",
   description: `Guides to diamonds, gemstones, metals, and buying well — written by the people who make the jewellery at ${SITE.name}.`,
-};
+  path: "/education",
+});
 
 export default function EducationPage() {
   // The 4Cs guide leads the page; every other article is grouped by category below.

@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { LegalDocument, PageHero } from "@/components/content";
 import { LEGAL_LAST_UPDATED, PRIVACY_SECTIONS } from "@/data/company";
 import { SITE } from "@/constants/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
   description: `How ${SITE.name} collects, uses, and protects your personal information — and the rights you have over it.`,
-};
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

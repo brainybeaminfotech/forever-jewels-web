@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { ProductDetailClient } from "@/components/jewellery";
 import { getProductDetailBySlug } from "@framework/product/get-product-details";
 import { getProductsByCategoryFromApi } from "@framework/product/get-all-products";
+import { JsonLd } from "@/components/common";
+import { CATEGORY_META } from "@/lib/catalog";
+import { breadcrumbJsonLd, pageMetadata, productJsonLd, SHARE_CARD_SIZE } from "@/lib/seo";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -25,9 +28,18 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const product = await getProductDetailBySlug(slug, { currency: "USD", revalidate });
   if (!product) return {};
   return {
-    title: product.name,
-    description: product.description ?? `${product.name} — ${product.metal ?? ""} ${product.gem ?? ""}`.trim(),
-    openGraph: { images: [product.image] },
+    ...pageMetadata({
+      title: product.name,
+      description: product.description ?? `${product.name} — ${product.metal ?? ""} ${product.gem ?? ""}`.trim(),
+      path: `/products/${product.slug}`,
+      // The API's photos are WebP served as octet-stream, which chat apps won't preview —
+      // og.jpg/route.ts re-renders this product's photo as a JPEG card.
+      image: { url: `/products/${product.slug}/og.jpg`, ...SHARE_CARD_SIZE, type: "image/jpeg", alt: product.name },
+    }),
+    other: {
+      "product:price:amount": product.price.toFixed(2),
+      "product:price:currency": product.currency,
+    },
   };
 }
 
@@ -43,5 +55,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
     : [];
   const related = categoryProducts.filter((p) => p.id !== product.id).slice(0, 4);
 
-  return <ProductDetailClient product={product} related={related} />;
+  const path = `/products/${product.slug}`;
+  const category = product.jewelleryCategory ? CATEGORY_META[product.jewelleryCategory] : undefined;
+  const breadcrumb = [
+    { name: "Home", path: "/" },
+    ...(category ? [{ name: category.label, path: `/jewellery/${category.slug}` }] : []),
+    { name: product.name, path },
+  ];
+
+  return (
+    <>
+      <JsonLd data={[productJsonLd(product, path), breadcrumbJsonLd(breadcrumb)]} />
+      <ProductDetailClient product={product} related={related} />
+    </>
+  );
 }

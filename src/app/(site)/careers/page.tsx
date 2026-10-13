@@ -6,11 +6,13 @@ import { Button } from "@/components/ui";
 import { FadeIn } from "@/components/animations";
 import { CAREER_BENEFITS, JOB_OPENINGS } from "@/data/company";
 import { SITE } from "@/constants/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Careers",
   description: `Open roles at ${SITE.name} — bench jewelers, setters, designers, and client advisors working in our New Jersey atelier.`,
-};
+  path: "/careers",
+});
 
 export default function CareersPage() {
   return (

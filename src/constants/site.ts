@@ -8,7 +8,8 @@ export const SITE = {
   logo: "/images/logo.png",
   logoWidth: 266,
   logoHeight: 51,
-  ogImage: "/images/og.jpg",
+  /** Default link-preview card (1200×630 JPEG) — regenerate with scripts/generate-brand-assets.mjs. */
+  ogImage: "/images/og-forever-jewels.jpg",
   phone: "+1 917 302 9312",
   phoneHref: "tel:+19173029312",
   whatsapp: "19173029312",
@@ -20,7 +21,14 @@ export const SITE = {
   state: "NJ",
   postalCode: "08816",
   country: "USA",
+  countryCode: "US",
   hours: "Mon – Sat: 10:00 AM – 7:00 PM",
+  /** Machine-readable `hours` for structured data — keep the two in sync. */
+  openingHours: {
+    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    opens: "10:00",
+    closes: "19:00",
+  },
   founded: 2008,
 } as const;
 

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-import { Container } from "@/components/common";
+import { Container, JsonLd } from "@/components/common";
 import { ContentSections, PageHero } from "@/components/content";
 import { Button } from "@/components/ui";
 import { FadeIn } from "@/components/animations";
@@ -13,6 +13,7 @@ import {
   getEducationArticlesByCategory,
   getEducationCategory,
 } from "@/data/education";
+import { articleJsonLd, breadcrumbJsonLd, pageMetadata, SHARE_CARD_SIZE } from "@/lib/seo";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -26,7 +27,14 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   const { slug } = await params;
   const article = getEducationArticle(slug);
   if (!article) return {};
-  return { title: article.title, description: article.excerpt, openGraph: { images: [article.image] } };
+  return pageMetadata({
+    title: article.title,
+    description: article.excerpt,
+    path: `/education/${article.slug}`,
+    type: "article",
+    // Article heroes include multi-MB PNGs and WebPs; og.jpg/route.ts serves a light JPEG card.
+    image: { url: `/education/${article.slug}/og.jpg`, ...SHARE_CARD_SIZE, type: "image/jpeg", alt: article.imageAlt },
+  });
 }
 
 export default async function EducationArticlePage({ params }: ArticlePageProps) {
@@ -39,8 +47,20 @@ export default async function EducationArticlePage({ params }: ArticlePageProps)
     .filter((entry) => entry.slug !== article.slug)
     .slice(0, 3);
 
+  const path = `/education/${article.slug}`;
+
   return (
     <>
+      <JsonLd
+        data={[
+          articleJsonLd({ title: article.title, description: article.excerpt, path, image: `${path}/og.jpg` }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Education", path: "/education" },
+            { name: article.title, path },
+          ]),
+        ]}
+      />
       <PageHero
         eyebrow={category?.label}
         title={article.title}

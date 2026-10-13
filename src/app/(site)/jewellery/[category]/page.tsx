@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { ListingClient } from "@/components/jewellery";
 import { CATEGORY_META, JEWELLERY_CATEGORIES, isJewelleryCategory } from "@/lib/catalog";
 import { getProductsByCategoryFromApi } from "@framework/product/get-all-products";
+import { JsonLd } from "@/components/common";
+import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 /** Revalidate the featured-product feed every 5 minutes (ISR). */
 export const revalidate = 300;
@@ -19,10 +21,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const { category } = await params;
   if (!isJewelleryCategory(category)) return {};
   const meta = CATEGORY_META[category];
-  return {
-    title: meta.title,
-    description: meta.description,
-  };
+  return pageMetadata({ title: meta.title, description: meta.description, path: `/jewellery/${category}` });
 }
 
 export default async function JewelleryCategoryPage({ params }: CategoryPageProps) {
@@ -32,5 +31,15 @@ export default async function JewelleryCategoryPage({ params }: CategoryPageProp
   // Live API data only — no static-catalog fallback, so the grid always reflects the DB.
   const products = await getProductsByCategoryFromApi(category, { currency: "USD", revalidate });
 
-  return <ListingClient products={products} category={category} />;
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: CATEGORY_META[category].label, path: `/jewellery/${category}` },
+        ])}
+      />
+      <ListingClient products={products} category={category} />
+    </>
+  );
 }

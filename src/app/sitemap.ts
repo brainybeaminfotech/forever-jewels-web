@@ -3,8 +3,6 @@ import { SITE } from "@/constants/site";
 import { JEWELLERY_CATEGORIES } from "@/lib/catalog";
 import { EDUCATION_ARTICLES } from "@/data/education";
 import { getProductsByCategoryFromApi } from "@framework/product/get-all-products";
-import { DIAMOND_CATALOG } from "@/data/diamond-catalog";
-import { GEMSTONE_CATALOG } from "@/data/gemstone-catalog";
 
 /** Regenerate daily so newly published products enter the index without a redeploy. */
 export const revalidate = 86400;
@@ -60,10 +58,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
-  const stonePages: MetadataRoute.Sitemap = [
-    ...DIAMOND_CATALOG.map((stone) => url(`/diamonds/stone/${stone.id}`)),
-    ...GEMSTONE_CATALOG.map((stone) => url(`/gemstone/stone/${stone.id}`)),
-  ].map((entry) => ({ url: entry, lastModified: now, changeFrequency: "weekly", priority: 0.6 }));
-
-  return [...staticPages, ...categoryPages, ...educationPages, ...productPages, ...stonePages];
+  // Individual stone URLs are left out while /diamonds and /gemstone are "Coming Soon" — every
+  // one of them currently renders that same page and declares the hub as canonical, and a
+  // sitemap should only list canonical URLs. Re-add them when the stone pages go live.
+  return [...staticPages, ...categoryPages, ...educationPages, ...productPages];
 }

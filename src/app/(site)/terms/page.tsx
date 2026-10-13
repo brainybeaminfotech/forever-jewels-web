@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { LegalDocument, PageHero } from "@/components/content";
 import { LEGAL_LAST_UPDATED, TERMS_SECTIONS } from "@/data/company";
 import { SITE } from "@/constants/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Terms & Conditions",
   description: `The terms that govern purchases from ${SITE.name} — ordering, pricing, shipping, returns, and warranty.`,
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

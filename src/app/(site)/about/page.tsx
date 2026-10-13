@@ -10,11 +10,13 @@ import { COMPANY_VALUES } from "@/data/company";
 import { HANDCRAFTED_STATS } from "@/data/stats";
 import { SITE } from "@/constants/site";
 import { IMAGES } from "@/lib/images";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About Us",
   description: `${SITE.name} is a New Jersey atelier crafting certified fine jewellery by hand — meet the people, the standards, and the guarantees behind every piece.`,
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

@@ -5,11 +5,13 @@ import { PageHero } from "@/components/content";
 import { Button } from "@/components/ui";
 import { FadeIn } from "@/components/animations";
 import { SITE } from "@/constants/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Ring Configurator",
   description: `Build your own ring with ${SITE.name} — coming soon. In the meantime our atelier takes bespoke commissions directly.`,
-};
+  path: "/ring-configurator",
+});
 
 export default function RingConfiguratorPage() {
   return (

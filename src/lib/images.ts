@@ -64,5 +64,4 @@ export const IMAGES = {
     "/images/instagram-7.jpg",
     "/images/instagram-8.jpg",
   ],
-  og: "/images/og.jpg",
 } as const;

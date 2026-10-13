@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
-import { Container } from "@/components/common";
+import { Container, JsonLd } from "@/components/common";
 import { ContactForm, PageHero } from "@/components/content";
 import { SocialIcon, type SocialName } from "@/components/ui";
 import { FadeIn } from "@/components/animations";
 import { CONTACT_ACTIONS, SITE, SOCIAL_LINKS } from "@/constants/site";
+import { organizationJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact Us",
   description: `Talk to a ${SITE.name} client advisor about a commission, an order, or a repair — or book a private appointment at our New Jersey atelier.`,
-};
+  path: "/contact",
+});
 
 const details: Array<{
   id: string;
@@ -29,6 +31,7 @@ const details: Array<{
 export default function ContactPage() {
   return (
     <>
+      <JsonLd data={organizationJsonLd()} />
       <PageHero
         eyebrow="Contact Us"
         title="Talk to someone who works on the pieces."
