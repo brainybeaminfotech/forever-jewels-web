@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { StoneListingClient } from "@/components/stones";
-import { GEMSTONE_TYPE_SLUGS, getStonesByCategory, pluralizeGemType, resolveGemstoneTypeSlug, STONE_META, type StoneFilters } from "@/lib/stones";
+import { StoneComingSoon } from "@/components/stones";
+import { GEMSTONE_TYPE_SLUGS, pluralizeGemType, resolveGemstoneTypeSlug, STONE_META } from "@/lib/stones";
 
 interface GemstoneTypePageProps {
   params: Promise<{ type: string }>;
@@ -20,11 +20,6 @@ export async function generateMetadata({ params }: GemstoneTypePageProps): Promi
 
 export default async function GemstoneTypePage({ params }: GemstoneTypePageProps) {
   const { type } = await params;
-  const gemstoneType = resolveGemstoneTypeSlug(type);
-  if (!gemstoneType) notFound();
-
-  const stones = getStonesByCategory("gemstone");
-  const initialFilters: Partial<StoneFilters> = { gemstoneType: [gemstoneType] };
-
-  return <StoneListingClient stones={stones} category="gemstone" initialFilters={initialFilters} pageTitle={`Loose ${pluralizeGemType(gemstoneType)}`} />;
+  if (!resolveGemstoneTypeSlug(type)) notFound();
+  return <StoneComingSoon category="gemstone" />;
 }

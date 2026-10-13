@@ -18,8 +18,10 @@ const SPARKLES = [
  * two slow-drifting glows, a slowly rotating brilliant-cut outline and a few
  * twinkling sparkles. Purely presentational — render inside a `relative`
  * parent, it positions itself absolutely and never captures pointer events.
+ * Pass `ornament={false}` to drop the ring outline when the section already
+ * has its own centrepiece illustration.
  */
-export function FacetBackdrop({ className }: { className?: string }) {
+export function FacetBackdrop({ className, ornament = true }: { className?: string; ornament?: boolean }) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -68,24 +70,26 @@ export function FacetBackdrop({ className }: { className?: string }) {
       />
 
       {/* Solitaire ring outline, gently swaying */}
-      <motion.svg
-        viewBox="0 0 200 200"
-        className="absolute left-1/2 top-10 h-[11rem] w-[11rem] -translate-x-1/2 text-gold-300/[0.09] sm:h-[15rem] sm:w-[15rem]"
-        animate={reduceMotion ? undefined : { rotate: [-7, 7, -7], y: [0, -10, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <g fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round">
-          {/* Band */}
-          <circle cx="100" cy="140" r="48" />
-          <circle cx="100" cy="140" r="42" />
-          {/* Prongs */}
-          <path d="M74 54L84 92M126 54L116 92" />
-          {/* Brilliant-cut stone */}
-          <path d="M82 34h36l12 16H70z" />
-          <path d="M70 50h60L100 92z" />
-          <path d="M85 50L100 92M115 50L100 92" />
-        </g>
-      </motion.svg>
+      {ornament && (
+        <motion.svg
+          viewBox="0 0 200 200"
+          className="absolute left-1/2 top-10 h-[11rem] w-[11rem] -translate-x-1/2 text-gold-300/[0.09] sm:h-[15rem] sm:w-[15rem]"
+          animate={reduceMotion ? undefined : { rotate: [-7, 7, -7], y: [0, -10, 0] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <g fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round">
+            {/* Band */}
+            <circle cx="100" cy="140" r="48" />
+            <circle cx="100" cy="140" r="42" />
+            {/* Prongs */}
+            <path d="M74 54L84 92M126 54L116 92" />
+            {/* Brilliant-cut stone */}
+            <path d="M82 34h36l12 16H70z" />
+            <path d="M70 50h60L100 92z" />
+            <path d="M85 50L100 92M115 50L100 92" />
+          </g>
+        </motion.svg>
+      )}
 
       {/* Sparkles */}
       {!reduceMotion &&

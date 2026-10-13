@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { StoneListingClient } from "@/components/stones";
-import {
-  DIAMOND_GROWTH_SLUGS,
-  DIAMOND_SHAPE_SLUGS,
-  getStonesByCategory,
-  resolveDiamondFilterSlug,
-  STONE_META,
-  type StoneFilters,
-} from "@/lib/stones";
+import { StoneComingSoon } from "@/components/stones";
+import { DIAMOND_GROWTH_SLUGS, DIAMOND_SHAPE_SLUGS, resolveDiamondFilterSlug, STONE_META } from "@/lib/stones";
 
 interface DiamondFilterPageProps {
   params: Promise<{ filter: string }>;
@@ -36,12 +29,6 @@ export async function generateMetadata({ params }: DiamondFilterPageProps): Prom
 
 export default async function DiamondFilterPage({ params }: DiamondFilterPageProps) {
   const { filter } = await params;
-  const resolution = resolveDiamondFilterSlug(filter);
-  if (!resolution) notFound();
-
-  const stones = getStonesByCategory("diamond");
-  const initialFilters: Partial<StoneFilters> =
-    resolution.kind === "shape" ? { shape: [resolution.value] } : resolution.kind === "growthType" ? { growthType: [resolution.value] } : {};
-
-  return <StoneListingClient stones={stones} category="diamond" initialFilters={initialFilters} pageTitle={pageTitleFor(resolution)} />;
+  if (!resolveDiamondFilterSlug(filter)) notFound();
+  return <StoneComingSoon category="diamond" />;
 }

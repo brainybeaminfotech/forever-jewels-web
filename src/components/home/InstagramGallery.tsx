@@ -30,7 +30,7 @@ export function InstagramGallery() {
     <section className="bg-white py-20 sm:py-28">
       <Container size="wide">
         <SectionHeading
-          eyebrow="@foreverjewels"
+          eyebrow="@foreverjewelsinc"
           title="Follow Our World"
           description="Behind-the-scenes craftsmanship, styling edits, and real moments — shared daily on Instagram."
         />

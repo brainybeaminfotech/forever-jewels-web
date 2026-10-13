@@ -14,3 +14,4 @@ export * from "./StoneBuyBox";
 export * from "./StoneAccordions";
 export * from "./RelatedStones";
 export * from "./StoneDetailClient";
+export * from "./StoneComingSoon";

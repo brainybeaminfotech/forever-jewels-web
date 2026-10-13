@@ -20,7 +20,6 @@ const companyLinks = [
   { label: "About Us", href: "/about" },
   { label: "Our Story", href: "/our-story" },
   { label: "Contact Us", href: "/contact" },
-  { label: "Careers", href: "/careers" },
   { label: "Terms & Conditions", href: "/terms" },
   { label: "Privacy Policy", href: "/privacy" },
 ];

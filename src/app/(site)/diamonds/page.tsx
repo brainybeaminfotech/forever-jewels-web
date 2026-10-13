@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { StoneListingClient } from "@/components/stones";
-import { getStonesByCategory, STONE_META } from "@/lib/stones";
+import { StoneComingSoon } from "@/components/stones";
+import { STONE_META } from "@/lib/stones";
 
 export const metadata: Metadata = {
   title: STONE_META.diamond.title,
@@ -8,6 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function DiamondsPage() {
-  const stones = getStonesByCategory("diamond");
-  return <StoneListingClient stones={stones} category="diamond" />;
+  return <StoneComingSoon category="diamond" />;
 }

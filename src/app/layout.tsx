@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Playfair_Display, Cormorant_Garamond, Inter } from "next/font/google";
 import { SITE } from "@/constants/site";
 import { CommerceProvider } from "@/hooks/useCommerce";
@@ -80,6 +81,8 @@ export default function RootLayout({
           {children}
           <FloatingActionMenu />
         </CommerceProvider>
+        {/* Right-click / double-click / DevTools-shortcut deterrent — see public/security.js */}
+        <Script src="/security.js" strategy="beforeInteractive" />
       </body>
     </html>
   );

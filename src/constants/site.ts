@@ -25,11 +25,8 @@ export const SITE = {
 } as const;
 
 export const SOCIAL_LINKS = [
-  { name: "Instagram", href: "https://instagram.com" },
-  { name: "Facebook", href: "https://facebook.com" },
-  { name: "Pinterest", href: "https://pinterest.com" },
-  { name: "YouTube", href: "https://youtube.com" },
-  { name: "X", href: "https://x.com" },
+  { name: "Instagram", href: "https://www.instagram.com/foreverjewelsinc/" },
+  { name: "Facebook", href: "https://www.facebook.com/foreverjewelsinc/" },
 ] as const;
 
 export const CONTACT_ACTIONS = {
