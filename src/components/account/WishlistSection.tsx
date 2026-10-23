@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { isRemoteImage } from "@/lib/images";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Heart, ShoppingBag, X } from "lucide-react";
@@ -56,6 +57,7 @@ export function WishlistSection({ items, onChange }: WishlistSectionProps) {
                   <Link href={`/products/${product.slug}`} className="relative block h-full w-full" aria-label={product.name}>
                     <Image
                       src={product.image}
+                      unoptimized={isRemoteImage(product.image)}
                       alt={product.name}
                       fill
                       sizes="(max-width: 768px) 45vw, 22vw"

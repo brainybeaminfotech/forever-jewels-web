@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { isRemoteImage } from "@/lib/images";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronDown, Download, RotateCw, Truck, X } from "lucide-react";
@@ -48,7 +49,7 @@ export function OrderCard({ order, address, compact = false, onCancel }: OrderCa
     return (
       <div className="flex items-center gap-4 border border-warm-200 bg-white p-4">
         <div className="relative h-14 w-14 shrink-0 overflow-hidden bg-warm-100">
-          <Image src={firstItem.product.image} alt={firstItem.product.name} fill sizes="56px" className="object-cover" />
+          <Image src={firstItem.product.image} unoptimized={isRemoteImage(firstItem.product.image)} alt={firstItem.product.name} fill sizes="56px" className="object-cover" />
         </div>
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-medium text-ink">
@@ -78,7 +79,7 @@ export function OrderCard({ order, address, compact = false, onCancel }: OrderCa
                 style={{ zIndex: 3 - i }}
                 className="relative h-16 w-16 shrink-0 overflow-hidden border-2 border-white bg-warm-100"
               >
-                <Image src={item.product.image} alt={item.product.name} fill sizes="64px" className="object-cover" />
+                <Image src={item.product.image} unoptimized={isRemoteImage(item.product.image)} alt={item.product.name} fill sizes="64px" className="object-cover" />
               </div>
             ))}
           </div>
@@ -182,7 +183,7 @@ export function OrderCard({ order, address, compact = false, onCancel }: OrderCa
                   {order.items.map((item) => (
                     <div key={item.product.id} className="flex items-center gap-3">
                       <Link href={`/products/${item.product.slug}`} className="relative h-12 w-12 shrink-0 overflow-hidden bg-warm-100">
-                        <Image src={item.product.image} alt={item.product.name} fill sizes="48px" className="object-cover" />
+                        <Image src={item.product.image} unoptimized={isRemoteImage(item.product.image)} alt={item.product.name} fill sizes="48px" className="object-cover" />
                       </Link>
                       <div className="min-w-0 flex-1">
                         <Link href={`/products/${item.product.slug}`} className="truncate text-sm text-ink hover:text-gold-600">

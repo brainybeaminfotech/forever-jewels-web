@@ -65,3 +65,15 @@ export const IMAGES = {
     "/images/instagram-8.jpg",
   ],
 } as const;
+
+/**
+ * True for absolute (API/S3) image URLs. Pass as `unoptimized` on `next/image` for
+ * product photos: they're already small `.webp` files, and routing every catalog photo
+ * × every `srcSet` width through Vercel's `/_next/image` optimizer exhausts the plan's
+ * image-optimization quota — after which it answers 402
+ * (`OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED`) and product tiles render blank in
+ * production while localhost still works. Local `/public` assets stay optimized.
+ */
+export function isRemoteImage(src: string | null | undefined): boolean {
+  return typeof src === "string" && /^https?:\/\//i.test(src);
+}

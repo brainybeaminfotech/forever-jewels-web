@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { isRemoteImage } from "@/lib/images";
 import { AnimatePresence, motion } from "framer-motion";
 import { Scale, X } from "lucide-react";
 import { Button, Rating } from "@/components/ui";
@@ -34,7 +35,7 @@ export function CompareTray({ products }: CompareTrayProps) {
                 <div className="flex -space-x-3">
                   {compared.map((p) => (
                     <div key={p.id} className="relative h-11 w-11 overflow-hidden rounded-full border-2 border-white bg-warm-100">
-                      <Image src={p.image} alt={p.name} fill sizes="44px" className="object-cover" />
+                      <Image src={p.image} unoptimized={isRemoteImage(p.image)} alt={p.name} fill sizes="44px" className="object-cover" />
                     </div>
                   ))}
                 </div>
@@ -88,7 +89,7 @@ export function CompareTray({ products }: CompareTrayProps) {
                       {compared.map((p) => (
                         <th key={p.id} className="min-w-52 pb-4 pr-4 align-bottom">
                           <div className="relative mb-3 aspect-square w-full overflow-hidden bg-warm-100">
-                            <Image src={p.image} alt={p.name} fill sizes="200px" className="object-cover" />
+                            <Image src={p.image} unoptimized={isRemoteImage(p.image)} alt={p.name} fill sizes="200px" className="object-cover" />
                           </div>
                           <p className="font-display text-base text-ink">{p.name}</p>
                           <Rating value={p.rating} reviewCount={p.reviewCount} className="mt-1" />

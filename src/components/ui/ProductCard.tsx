@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
+import { isRemoteImage } from "@/lib/images";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Heart, Share2, Check } from "lucide-react";
@@ -87,6 +88,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
               <Image
                 key={src}
                 src={src}
+                unoptimized={isRemoteImage(src)}
                 alt={product.name}
                 fill
                 sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 24vw"

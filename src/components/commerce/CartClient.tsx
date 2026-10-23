@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { isRemoteImage } from "@/lib/images";
 import Link from "next/link";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { Container } from "@/components/common";
@@ -40,7 +41,7 @@ export function CartClient() {
                 href={`/products/${product.slug}`}
                 className="relative h-28 w-24 shrink-0 overflow-hidden bg-warm-100 sm:h-36 sm:w-32"
               >
-                <Image src={product.image} alt={product.name} fill sizes="128px" className="object-cover" />
+                <Image src={product.image} unoptimized={isRemoteImage(product.image)} alt={product.name} fill sizes="128px" className="object-cover" />
               </Link>
 
               <div className="flex min-w-0 flex-1 flex-col">

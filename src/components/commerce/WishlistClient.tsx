@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { isRemoteImage } from "@/lib/images";
 import Link from "next/link";
 import { Heart, Trash2 } from "lucide-react";
 import { Container } from "@/components/common";
@@ -37,6 +38,7 @@ export function WishlistClient() {
             <Link href={`/products/${product.slug}`} className="relative aspect-square overflow-hidden bg-warm-100">
               <Image
                 src={product.image}
+                unoptimized={isRemoteImage(product.image)}
                 alt={product.name}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { isRemoteImage } from "@/lib/images";
 import { Play } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperClass } from "swiper";
@@ -119,7 +120,7 @@ export function ProductGallery({ variants, activeMetal, name }: ProductGalleryPr
                   </span>
                 </>
               ) : (
-                <Image src={cell.src} alt="" fill sizes="80px" className="object-cover" />
+                <Image src={cell.src} unoptimized={isRemoteImage(cell.src)} alt="" fill sizes="80px" className="object-cover" />
               )}
             </button>
           ))}
@@ -156,6 +157,7 @@ export function ProductGallery({ variants, activeMetal, name }: ProductGalleryPr
               <Image
                 key={cell.src}
                 src={cell.src}
+                unoptimized={isRemoteImage(cell.src)}
                 alt={name}
                 fill
                 priority={isActive}
@@ -175,7 +177,7 @@ export function ProductGallery({ variants, activeMetal, name }: ProductGalleryPr
                 {cell.type === "video" ? (
                   <video src={cell.src} controls muted loop playsInline className="h-full w-full object-cover" />
                 ) : (
-                  <Image src={cell.src} alt={name} fill sizes="100vw" className="object-cover" priority={cell.view === activeView} />
+                  <Image src={cell.src} unoptimized={isRemoteImage(cell.src)} alt={name} fill sizes="100vw" className="object-cover" priority={cell.view === activeView} />
                 )}
               </div>
             </SwiperSlide>

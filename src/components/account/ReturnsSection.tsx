@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type FormEvent } from "react";
 import Image from "next/image";
+import { isRemoteImage } from "@/lib/images";
 import { PackageX, Plus, RotateCcw } from "lucide-react";
 import { Button, Modal, StatusBadge } from "@/components/ui";
 import { getReturnStatusMeta } from "@/lib/account";
@@ -102,7 +103,7 @@ export function ReturnsSection({ returns, orders, onChange }: ReturnsSectionProp
             return (
               <div key={request.id} className="flex flex-col gap-4 border border-warm-200 bg-white p-5 sm:flex-row sm:items-center">
                 <div className="relative h-16 w-16 shrink-0 overflow-hidden bg-warm-100">
-                  <Image src={request.product.image} alt={request.product.name} fill sizes="64px" className="object-cover" />
+                  <Image src={request.product.image} unoptimized={isRemoteImage(request.product.image)} alt={request.product.name} fill sizes="64px" className="object-cover" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-ink">{request.product.name}</p>

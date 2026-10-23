@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { isRemoteImage } from "@/lib/images";
 import Link from "next/link";
 import { SearchX } from "lucide-react";
 import { Container } from "@/components/common";
@@ -55,6 +56,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <div className="relative aspect-square overflow-hidden bg-warm-100">
                   <Image
                     src={hit.image}
+                    unoptimized={isRemoteImage(hit.image)}
                     alt={hit.name}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
