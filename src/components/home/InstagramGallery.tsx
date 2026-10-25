@@ -90,6 +90,8 @@ export function InstagramGallery() {
                     alt={post.caption}
                     fill
                     sizes="(max-width: 640px) 75vw, (max-width: 1280px) 32vw, 22vw"
+                    // Small pre-sized photos — served as-is, not through the quota-limited optimizer.
+                    unoptimized
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                   />
 

@@ -26,6 +26,9 @@ export function Blogs() {
                     alt={post.title}
                     fill
                     sizes="(max-width: 768px) 90vw, 24vw"
+                    // Small pre-sized JPEGs — served as-is so they don't depend on
+                    // Vercel's image-optimization quota (402s once it runs out).
+                    unoptimized
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                   />
                   <span className="absolute left-4 top-4 bg-white/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-ink">

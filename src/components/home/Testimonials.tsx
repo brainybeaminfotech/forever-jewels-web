@@ -44,7 +44,8 @@ export function Testimonials() {
                   <Rating value={testimonial.rating} className="mt-6" />
                   <div className="mt-4 flex items-center gap-3">
                     <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full">
-                      <Image src={testimonial.image} alt={testimonial.name} fill sizes="48px" className="object-cover" />
+                      {/* ~10 KB avatars — served as-is, not through the quota-limited optimizer. */}
+                      <Image src={testimonial.image} alt={testimonial.name} fill sizes="48px" unoptimized className="object-cover" />
                     </div>
                     <div>
                       <p className="font-display text-base text-ink">{testimonial.name}</p>

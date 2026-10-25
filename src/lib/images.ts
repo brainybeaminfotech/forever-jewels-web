@@ -8,7 +8,7 @@
 export const IMAGES = {
   hero: [
     "/banner1.webp",
-    "/banner2.png",
+    "/banner2.webp",
   ],
   categories: {
     rings: "/category/ring.webp",

@@ -116,6 +116,9 @@ export function HeroSlider() {
                 fill
                 priority={index === 0}
                 sizes="100vw"
+                // Banners are pre-compressed WebPs (≤250 KB) — served as-is so the hero
+                // doesn't depend on Vercel's image-optimization quota (402s once it runs out).
+                unoptimized
                 className="object-cover"
               />
               <div className={`absolute inset-0 ${sideGradient}`} />
