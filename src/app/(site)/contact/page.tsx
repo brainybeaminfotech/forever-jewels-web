@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin } from "lucide-react";
 import { Container, JsonLd } from "@/components/common";
 import { ContactForm, PageHero } from "@/components/content";
 import { SocialIcon, type SocialName } from "@/components/ui";
@@ -19,11 +19,8 @@ const details: Array<{
   label: string;
   value?: string;
   href?: string;
-  /** Rendered one per line — used for the postal address. */
-  lines?: readonly string[];
 }> = [
-  { id: "address", Icon: MapPin, label: "Visit the Atelier", lines: SITE.addressLines },
-  { id: "phone", Icon: Phone, label: "Call Us", value: SITE.phone, href: SITE.phoneHref },
+  { id: "address", Icon: MapPin, label: "Based In", value: SITE.address },
   { id: "email", Icon: Mail, label: "Email Us", value: SITE.email, href: `mailto:${SITE.email}` },
   { id: "hours", Icon: Clock, label: "Opening Hours", value: SITE.hours },
 ];
@@ -59,9 +56,7 @@ export default function ContactPage() {
                   <div>
                     <dt className="text-xs uppercase tracking-[0.2em] text-warm-500">{detail.label}</dt>
                     <dd className="mt-1.5 text-sm text-ink sm:text-base">
-                      {detail.lines ? (
-                        detail.lines.map((line) => <span key={line} className="block">{line}</span>)
-                      ) : detail.href ? (
+                      {detail.href ? (
                         <a href={detail.href} className="transition-colors hover:text-gold-600">
                           {detail.value}
                         </a>
@@ -75,17 +70,7 @@ export default function ContactPage() {
             </dl>
 
             <FadeIn direction="up" className="mt-10 border-t border-warm-200 pt-8">
-              <p className="text-xs uppercase tracking-[0.2em] text-warm-500">Prefer WhatsApp?</p>
-              <a
-                href={CONTACT_ACTIONS.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-block text-sm text-ink underline-offset-4 transition-colors hover:text-gold-600 hover:underline sm:text-base"
-              >
-                Message us directly
-              </a>
-
-              <div className="mt-8 flex items-center gap-3">
+              <div className="flex items-center gap-3">
                 {SOCIAL_LINKS.map((social) => (
                   <a
                     key={social.name}

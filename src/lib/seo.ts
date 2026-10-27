@@ -103,15 +103,11 @@ export function organizationJsonLd() {
     image: absoluteUrl(SITE.ogImage),
     description: SITE.description,
     slogan: SITE.tagline,
-    telephone: SITE.phone,
     email: SITE.email,
     foundingDate: String(SITE.founded),
     address: {
       "@type": "PostalAddress",
-      streetAddress: SITE.addressLines[0],
-      addressLocality: SITE.city,
       addressRegion: SITE.state,
-      postalCode: SITE.postalCode,
       addressCountry: SITE.countryCode,
     },
     openingHoursSpecification: [

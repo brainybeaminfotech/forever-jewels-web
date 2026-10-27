@@ -1,6 +1,5 @@
 export * from "./Button";
 export * from "./SocialIcon";
-export * from "./WhatsAppIcon";
 export * from "./IconButton";
 export * from "./Badge";
 export * from "./Rating";

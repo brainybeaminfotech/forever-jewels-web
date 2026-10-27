@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { MapPin, Phone, Mail, Clock, ArrowRight } from "lucide-react";
+import { MapPin, Mail, Clock, ArrowRight } from "lucide-react";
 import { Container, Logo } from "@/components/common";
 import {
   AmexIcon,
@@ -54,10 +54,6 @@ export function Footer() {
                 <MapPin size={16} className="mt-0.5 shrink-0 text-gold-400" />
                 {SITE.address}
               </p>
-              <a href={SITE.phoneHref} className="flex items-center gap-2 hover:text-gold-400">
-                <Phone size={16} className="shrink-0 text-gold-400" />
-                {SITE.phone}
-              </a>
               <a href={`mailto:${SITE.email}`} className="flex items-center gap-2 hover:text-gold-400">
                 <Mail size={16} className="shrink-0 text-gold-400" />
                 {SITE.email}

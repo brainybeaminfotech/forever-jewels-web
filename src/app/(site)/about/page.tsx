@@ -46,7 +46,7 @@ export default function AboutPage() {
             </h2>
             <div className="mt-6 space-y-4 text-sm leading-relaxed text-warm-600 sm:text-base">
               <p>
-                We are a small house by design. Our atelier is in {SITE.city}, {SITE.state}, and the twelve master
+                We are a small house by design. Our atelier is in New Jersey, and the twelve master
                 jewelers on staff handle every stage — casting, setting, polishing — without sending work out.
               </p>
               <p>

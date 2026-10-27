@@ -10,16 +10,10 @@ export const SITE = {
   logoHeight: 51,
   /** Default link-preview card (1200×630 JPEG) — regenerate with scripts/generate-brand-assets.mjs. */
   ogImage: "/images/og-forever-jewels.jpg",
-  phone: "+1 917 302 9312",
-  phoneHref: "tel:+19173029312",
-  whatsapp: "19173029312",
-  email: "social@foreverjewelsinc.com",
-  address: "2 Tower Center Blvd, 10th Fl, East Brunswick, NJ 08816 USA",
-  /** Same address split for multi-line display (contact page, structured data). */
-  addressLines: ["2 Tower Center Blvd, 10th Fl", "East Brunswick, NJ 08816 USA"],
-  city: "East Brunswick",
+  email: "abhi@foreverjewelsinc.com",
+  /** Region only — the business deliberately publishes no street address or phone number. */
+  address: "New Jersey, USA",
   state: "NJ",
-  postalCode: "08816",
   country: "USA",
   countryCode: "US",
   hours: "Mon – Sat: 10:00 AM – 7:00 PM",
@@ -38,9 +32,6 @@ export const SOCIAL_LINKS = [
 ] as const;
 
 export const CONTACT_ACTIONS = {
-  whatsapp: `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(
-    "Hello Forever Jewels, I'd like to know more about your collections."
-  )}`,
   email: `mailto:${SITE.email}?subject=${encodeURIComponent("Enquiry from foreverjewels.com")}`,
   schedule: "/book-appointment",
   inquiry: "/contact",

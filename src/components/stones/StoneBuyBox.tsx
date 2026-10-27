@@ -43,7 +43,7 @@ export function StoneBuyBox({ stone }: StoneBuyBoxProps) {
     stone.category === "diamond" ? { label: "Certificate", value: stone.lab } : { label: "Quality Grade", value: stone.qualityGrade ? `${stone.qualityGrade} — ${QUALITY_GRADE_NOTE[stone.qualityGrade]}` : undefined },
   ].filter((f) => f.value);
 
-  const inquiryHref = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hello Forever Jewels, I'd like to inquire about the ${headlineFor(stone)} (Stock #${stone.id}).`)}`;
+  const inquiryHref = `mailto:${SITE.email}?subject=${encodeURIComponent(`Inquiry — ${headlineFor(stone)} (Stock #${stone.id})`)}`;
 
   async function handleShare() {
     const url = typeof window !== "undefined" ? window.location.href : `/${stone.category === "diamond" ? "diamonds" : "gemstone"}/stone/${stone.slug}`;
@@ -133,7 +133,7 @@ export function StoneBuyBox({ stone }: StoneBuyBoxProps) {
       </div>
 
       <div className="mt-6">
-        <Button variant="primary" size="lg" fullWidth icon={<MessageSquareText size={16} />} href={inquiryHref} target="_blank" rel="noopener noreferrer">
+        <Button variant="primary" size="lg" fullWidth icon={<MessageSquareText size={16} />} href={inquiryHref}>
           Inquiry Now
         </Button>
       </div>

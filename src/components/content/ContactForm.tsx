@@ -61,7 +61,7 @@ export function ContactForm() {
           <label htmlFor="contact-phone" className="text-xs uppercase tracking-[0.2em] text-warm-500">
             Phone
           </label>
-          <Input id="contact-phone" name="phone" type="tel" autoComplete="tel" placeholder="+1 917 302 9312" />
+          <Input id="contact-phone" name="phone" type="tel" autoComplete="tel" placeholder="Optional" />
         </div>
         <div>
           <label htmlFor="contact-subject" className="text-xs uppercase tracking-[0.2em] text-warm-500">

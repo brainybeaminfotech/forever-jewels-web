@@ -16,7 +16,7 @@ export const COMPANY_VALUES: CompanyValue[] = [
     id: "craft",
     title: "Craft Before Volume",
     description:
-      "Every piece is finished by hand in our East Brunswick atelier. We would rather release a dozen pieces we are proud of than a hundred we are not.",
+      "Every piece is finished by hand in our New Jersey atelier. We would rather release a dozen pieces we are proud of than a hundred we are not.",
   },
   {
     id: "provenance",
@@ -105,7 +105,7 @@ export const JOB_OPENINGS: JobOpening[] = [
     id: "bench-jeweler",
     title: "Bench Jeweler",
     department: "Atelier",
-    location: "East Brunswick, NJ",
+    location: "New Jersey",
     type: "Full-time",
     description:
       "Hand-fabricate and finish fine jewellery, from wax to final polish. Five or more years at the bench, with demonstrable stone-setting work.",
@@ -114,7 +114,7 @@ export const JOB_OPENINGS: JobOpening[] = [
     id: "diamond-setter",
     title: "Diamond Setter",
     department: "Atelier",
-    location: "East Brunswick, NJ",
+    location: "New Jersey",
     type: "Full-time",
     description:
       "Micro-pavé, channel, and bezel setting on platinum and gold. Precision under magnification matters more here than speed.",
@@ -123,7 +123,7 @@ export const JOB_OPENINGS: JobOpening[] = [
     id: "client-advisor",
     title: "Client Advisor",
     department: "Retail",
-    location: "East Brunswick, NJ",
+    location: "New Jersey",
     type: "Full-time",
     description:
       "Guide clients through bespoke commissions from first consultation to collection. Experience in fine jewellery or a comparable considered-purchase category.",
@@ -132,7 +132,7 @@ export const JOB_OPENINGS: JobOpening[] = [
     id: "cad-designer",
     title: "CAD Designer",
     department: "Design",
-    location: "Remote / East Brunswick, NJ",
+    location: "Remote / New Jersey",
     type: "Full-time",
     description:
       "Translate sketches and client briefs into production-ready CAD. Strong RhinoGold or MatrixGold portfolio required.",
@@ -141,7 +141,7 @@ export const JOB_OPENINGS: JobOpening[] = [
     id: "ecommerce-manager",
     title: "Ecommerce Manager",
     department: "Digital",
-    location: "East Brunswick, NJ",
+    location: "New Jersey",
     type: "Full-time",
     description:
       "Own the online storefront end to end — merchandising, product data, and the conversion path from first visit to fitting.",
@@ -270,7 +270,7 @@ export const TERMS_SECTIONS: LegalSection[] = [
     title: "10. Governing Law and Contact",
     body: [
       "These terms are governed by the laws of the State of New York, and the courts of New York shall have exclusive jurisdiction.",
-      `Questions about these terms can be sent to ${SITE.email} or to ${SITE.address}.`,
+      `Questions about these terms can be sent to ${SITE.email}.`,
     ],
   },
 ];
@@ -365,7 +365,7 @@ export const PRIVACY_SECTIONS: LegalSection[] = [
     id: "contact",
     title: "11. Contact Us",
     body: [
-      `To exercise any of these rights, or to ask how your information is handled, write to ${SITE.email} or to ${SITE.address}. We respond within 30 days.`,
+      `To exercise any of these rights, or to ask how your information is handled, write to ${SITE.email}. We respond within 30 days.`,
     ],
   },
 ];

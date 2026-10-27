@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Mail, MessageSquareText, Phone } from "lucide-react";
-import { Accordion, Button, Input, WhatsAppIcon } from "@/components/ui";
+import { Mail, MessageSquareText } from "lucide-react";
+import { Accordion, Button, Input } from "@/components/ui";
 import { CONTACT_ACTIONS, SITE } from "@/constants/site";
 
 const FAQS = [
@@ -63,34 +63,7 @@ export function SupportSection() {
         <p className="mt-1 text-sm text-warm-600">We&apos;re here to help, every step of the way.</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <a
-          href={SITE.phoneHref}
-          className="flex flex-col gap-3 border border-warm-200 bg-white p-5 transition-colors duration-300 hover:border-gold-400"
-        >
-          <span className="flex h-10 w-10 items-center justify-center bg-gold-50 text-gold-600">
-            <Phone size={17} />
-          </span>
-          <div>
-            <p className="text-sm font-medium text-ink">Call Us</p>
-            <p className="mt-0.5 text-xs text-warm-500">{SITE.phone}</p>
-            <p className="text-xs text-warm-500">{SITE.hours}</p>
-          </div>
-        </a>
-        <a
-          href={CONTACT_ACTIONS.whatsapp}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-col gap-3 border border-warm-200 bg-white p-5 transition-colors duration-300 hover:border-gold-400"
-        >
-          <span className="flex h-10 w-10 items-center justify-center bg-gold-50 text-gold-600">
-            <WhatsAppIcon size={17} />
-          </span>
-          <div>
-            <p className="text-sm font-medium text-ink">WhatsApp</p>
-            <p className="mt-0.5 text-xs text-warm-500">Chat with our concierge team</p>
-          </div>
-        </a>
+      <div className="grid grid-cols-1 gap-4">
         <a
           href={CONTACT_ACTIONS.email}
           className="flex flex-col gap-3 border border-warm-200 bg-white p-5 transition-colors duration-300 hover:border-gold-400"
@@ -101,6 +74,7 @@ export function SupportSection() {
           <div>
             <p className="text-sm font-medium text-ink">Email Us</p>
             <p className="mt-0.5 text-xs text-warm-500">{SITE.email}</p>
+            <p className="text-xs text-warm-500">{SITE.hours}</p>
           </div>
         </a>
       </div>

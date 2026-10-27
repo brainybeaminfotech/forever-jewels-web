@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Diamond, Heart, Phone, Mail, ShoppingBag, X, LogIn, UserPlus, UserRound } from "lucide-react";
+import { ChevronDown, Diamond, Heart, Mail, ShoppingBag, X, LogIn, UserPlus, UserRound } from "lucide-react";
 import { MAIN_NAVIGATION, MOBILE_UTILITY_LINKS } from "@/data/navigation";
 import { SITE, SOCIAL_LINKS } from "@/constants/site";
 import { DiamondShapeIcon, Logo } from "@/components/common";
@@ -244,9 +244,6 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
               <Link href="/signup" className="flex items-center gap-2 text-sm text-ink">
                 <UserPlus size={16} /> Register
               </Link>
-              <a href={SITE.phoneHref} className="flex items-center gap-2 text-sm text-warm-600">
-                <Phone size={16} /> {SITE.phone}
-              </a>
               <a href={`mailto:${SITE.email}`} className="flex items-center gap-2 text-sm text-warm-600">
                 <Mail size={16} /> {SITE.email}
               </a>

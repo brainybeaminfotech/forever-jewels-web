@@ -6,7 +6,7 @@ import { isRemoteImage } from "@/lib/images";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Heart, ShoppingBag, UserRound, Menu, ChevronDown, MapPin, Phone, X, ArrowUpRight } from "lucide-react";
+import { Search, Heart, ShoppingBag, UserRound, Menu, ChevronDown, MapPin, Mail, X, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/utils/format";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
@@ -229,8 +229,8 @@ export function Header() {
               <span className="flex items-center gap-1.5">
                 <MapPin size={13} /> {SITE.address}
               </span>
-              <a href={SITE.phoneHref} className="flex items-center gap-1.5 hover:text-gold-500">
-                <Phone size={13} /> {SITE.phone}
+              <a href={`mailto:${SITE.email}`} className="flex items-center gap-1.5 hover:text-gold-500">
+                <Mail size={13} /> {SITE.email}
               </a>
             </div>
             <div className={cn("flex items-center gap-6", textTone)}>

@@ -628,7 +628,7 @@ export const EDUCATION_ARTICLES: EducationArticle[] = [
         id: "claim",
         title: "Making a claim",
         body: [
-          `Contact us with your order number and a photograph of the issue. We will arrange insured shipping in both directions, or you can bring the piece to ${SITE.address}.`,
+          `Contact us with your order number and a photograph of the issue. We will arrange insured shipping in both directions, or you can arrange to bring the piece to us in person.`,
         ],
       },
     ],

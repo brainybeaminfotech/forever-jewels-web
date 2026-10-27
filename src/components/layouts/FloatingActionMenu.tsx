@@ -4,19 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Mail, CalendarClock, MessageSquareText, Plus } from "lucide-react";
-import { WhatsAppIcon } from "@/components/ui";
 import { CONTACT_ACTIONS } from "@/constants/site";
 import { cn } from "@/lib/utils";
 
 const actions = [
-  {
-    key: "whatsapp",
-    label: "WhatsApp",
-    href: CONTACT_ACTIONS.whatsapp,
-    icon: WhatsAppIcon,
-    tone: "bg-[#25D366] text-white",
-    external: true,
-  },
   {
     key: "email",
     label: "Email",
