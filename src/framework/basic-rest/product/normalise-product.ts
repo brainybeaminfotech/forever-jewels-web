@@ -7,7 +7,7 @@
 
 import http from "@framework/utils/http";
 import { API_ENDPOINTS } from "@framework/utils/api-endpoints";
-import type { ApiCompanyInfoData, ApiEnvelope, ApiProduct } from "@framework/types";
+import type { ApiCompanyInfoData, ApiEnvelope, ApiProduct, ApiProductsFilterData } from "@framework/types";
 import type { GoldPurity, JewelleryCategorySlug, Product } from "@/types";
 
 /* ------------------------------------------------------------------ */
@@ -37,6 +37,31 @@ export async function getImageBaseUrl(): Promise<string> {
     imageBaseUrlCache = envFallback;
   }
   return imageBaseUrlCache;
+}
+
+/* ------------------------------------------------------------------ */
+/* shape names                                                         */
+/* ------------------------------------------------------------------ */
+
+export type ShapeNames = Map<number, string>;
+
+const titleCase = (s: string) => s.trim().toLowerCase().replace(/[-_\s]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+let shapeNamesCache: ShapeNames | undefined;
+
+/** The list payload only carries `pdo[].id_shape`; names come from the filter endpoint. */
+export async function getShapeNames(): Promise<ShapeNames> {
+  if (shapeNamesCache) return shapeNamesCache;
+  try {
+    const res = await http.get<ApiEnvelope<ApiProductsFilterData>>(API_ENDPOINTS.PRODUCTSFILTER, { revalidate: 3600 });
+    shapeNamesCache = new Map(
+      (res?.data?.diamondShapeData ?? []).filter((s) => s.name).map((s) => [s.id, titleCase(s.name as string)]),
+    );
+    return shapeNamesCache;
+  } catch {
+    // Don't cache a failure — the Shape filter just stays hidden until the next fetch.
+    return new Map();
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -83,6 +108,19 @@ export function resolveCategoryFromNames(names: string[]): JewelleryCategorySlug
   return undefined;
 }
 
+// Admin-entered sub-category names carry typos that would split one option into two.
+const SUB_CATEGORY_TYPOS: [RegExp, string][] = [
+  [/emerlad/gi, "emerald"],
+  [/esarring/gi, "earring"],
+  [/bengle/gi, "bangle"],
+];
+
+function resolveSubCategory(apiProduct: ApiProduct): string | undefined {
+  const raw = apiProduct.product_categories?.find((c) => c.sub_category_name?.trim())?.sub_category_name;
+  if (!raw) return undefined;
+  return titleCase(SUB_CATEGORY_TYPOS.reduce((name, [typo, fix]) => name.replace(typo, fix), raw));
+}
+
 function resolveCategory(apiProduct: ApiProduct): JewelleryCategorySlug | undefined {
   return resolveCategoryFromNames((apiProduct.product_categories ?? []).map((c) => (c.category_name ?? "").toLowerCase()));
 }
@@ -119,7 +157,7 @@ export const TONE_LABEL: Record<string, string> = {
  * Returns null for records that can't render as a card — no price or no photo.
  * Skipping is deliberate: a card with a missing image or "$0" looks broken.
  */
-export function normaliseProduct(apiProduct: ApiProduct, imageBaseUrl: string, currency: string): Product | null {
+export function normaliseProduct(apiProduct: ApiProduct, imageBaseUrl: string, currency: string, shapeNames?: ShapeNames): Product | null {
   const price = apiProduct.retail_price;
   if (!apiProduct.name || price === null || price === undefined || price <= 0) return null;
 
@@ -156,6 +194,13 @@ export function normaliseProduct(apiProduct: ApiProduct, imageBaseUrl: string, c
   if (jewelleryCategory) product.jewelleryCategory = jewelleryCategory;
   if (apiProduct.sku) product.sku = apiProduct.sku;
   if (apiProduct.created_date) product.createdAt = apiProduct.created_date;
+
+  const subCategory = resolveSubCategory(apiProduct);
+  if (subCategory) product.subCategory = subCategory;
+
+  const shapeId = apiProduct.pdo?.find((d) => d.id_shape)?.id_shape;
+  const shape = shapeId ? shapeNames?.get(shapeId) : undefined;
+  if (shape) product.shape = shape;
 
   const compare = apiProduct.compare_price;
   if (compare !== null && compare !== undefined && compare > price) product.compareAtPrice = compare;

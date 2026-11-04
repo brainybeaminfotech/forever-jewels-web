@@ -39,6 +39,12 @@ export interface ApiProduct {
   product_categories: ApiProductCategory[] | null;
   product_images: ApiProductImage[] | null;
   pmo: ApiProductMetalOption[] | null;
+  /** Stone rows; the first one with an `id_shape` is the centre stone. */
+  pdo?: Array<{ id_shape: number | null }> | null;
+}
+
+export interface ApiProductsFilterData {
+  diamondShapeData?: Array<{ id: number; name: string | null }> | null;
 }
 
 export interface ApiPagination {

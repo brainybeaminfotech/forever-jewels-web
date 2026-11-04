@@ -102,7 +102,10 @@ export interface Product {
   goldPurity?: GoldPurity;
   diamondType?: DiamondType;
   gemstoneType?: string;
-  shape?: DiamondShape;
+  /** Centre-stone shape name; API shapes (e.g. "Slice") go beyond `DiamondShape`. */
+  shape?: DiamondShape | (string & {});
+  /** API sub-category, e.g. "Diamond Ring" — drives the listing's Category filter. */
+  subCategory?: string;
   style?: string;
   occasion?: string[];
   gender?: ProductGender;

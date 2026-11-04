@@ -138,6 +138,7 @@ export function getNewArrivals(count = 8): Product[] {
 // ---------------------------------------------------------------------------
 
 export interface ListingFilters {
+  subCategory: string[];
   collection: string[];
   metal: string[];
   goldPurity: string[];
@@ -153,11 +154,10 @@ export interface ListingFilters {
   priceMin: number | null;
   priceMax: number | null;
   readyToShip: boolean;
-  customizable: boolean;
-  featured: boolean;
 }
 
 export const EMPTY_FILTERS: ListingFilters = {
+  subCategory: [],
   collection: [],
   metal: [],
   goldPurity: [],
@@ -173,24 +173,21 @@ export const EMPTY_FILTERS: ListingFilters = {
   priceMin: null,
   priceMax: null,
   readyToShip: false,
-  customizable: false,
-  featured: false,
 };
 
-const MULTI_KEYS = ["collection", "metal", "goldPurity", "diamondType", "gemstone", "shape", "style", "occasion", "gender", "size", "availability", "certification"] as const;
+export const MULTI_KEYS = ["subCategory", "collection", "metal", "goldPurity", "diamondType", "gemstone", "shape", "style", "occasion", "gender", "size", "availability", "certification"] as const;
 
 export function countActiveFilters(f: ListingFilters): number {
   let n = 0;
   for (const key of MULTI_KEYS) n += f[key].length;
   if (f.priceMin !== null || f.priceMax !== null) n += 1;
   if (f.readyToShip) n += 1;
-  if (f.customizable) n += 1;
-  if (f.featured) n += 1;
   return n;
 }
 
 export function applyFilters(products: Product[], f: ListingFilters): Product[] {
   return products.filter((p) => {
+    if (f.subCategory.length && !(p.subCategory && f.subCategory.includes(p.subCategory))) return false;
     if (f.collection.length && !(p.collectionSlug && f.collection.includes(p.collectionSlug))) return false;
     if (f.metal.length && !p.metalOptions?.some((m) => f.metal.includes(m.id))) return false;
     if (f.goldPurity.length && !(p.goldPurity && f.goldPurity.includes(p.goldPurity))) return false;
@@ -205,9 +202,7 @@ export function applyFilters(products: Product[], f: ListingFilters): Product[] 
     if (f.certification.length && !(p.certification && f.certification.includes(p.certification))) return false;
     if (f.priceMin !== null && (p.priceMax ?? p.price) < f.priceMin) return false;
     if (f.priceMax !== null && (p.priceMin ?? p.price) > f.priceMax) return false;
-    if (f.readyToShip && !p.readyToShip) return false;
-    if (f.customizable && !p.customizable) return false;
-    if (f.featured && !(p.isNew || p.isBestseller)) return false;
+    // Every piece ships ready-made, so "Ready to Ship only" keeps the whole catalogue.
     return true;
   });
 }
@@ -253,7 +248,7 @@ export function sortProducts(products: Product[], sort: SortKey): Product[] {
 // Facets — option lists (with live counts) derived from the category's products
 // ---------------------------------------------------------------------------
 
-export type FacetKey = (typeof MULTI_KEYS)[number] | "price" | "readyToShip" | "customizable" | "featured";
+export type FacetKey = (typeof MULTI_KEYS)[number] | "price" | "readyToShip";
 
 export interface FacetOption {
   value: string;
@@ -289,13 +284,24 @@ export function buildFacets(products: Product[], category: JewelleryCategorySlug
   const maxPrices = products.map((p) => p.priceMax ?? p.price);
 
   const facets: Facet[] = [
-    { key: "featured", label: "New & Bestselling", type: "toggle" },
     {
       key: "price",
       label: "Price Range",
       type: "price",
       min: Math.min(...prices),
       max: Math.max(...maxPrices),
+    },
+    {
+      key: "subCategory",
+      label: "Category",
+      type: "checkbox",
+      options: tally(products, (p) => (p.subCategory ? [p.subCategory] : undefined)),
+    },
+    {
+      key: "shape",
+      label: "Shape",
+      type: "checkbox",
+      options: tally(products, (p) => (p.shape ? [p.shape] : undefined), capitalize),
     },
     {
       key: "collection",
@@ -331,12 +337,6 @@ export function buildFacets(products: Product[], category: JewelleryCategorySlug
       label: "Gemstone",
       type: "checkbox",
       options: tally(products, (p) => (p.gemstoneType ? [p.gemstoneType] : undefined)),
-    },
-    {
-      key: "shape",
-      label: "Shape",
-      type: "checkbox",
-      options: tally(products, (p) => (p.shape ? [p.shape] : undefined), capitalize),
     },
     {
       key: "style",
@@ -379,7 +379,6 @@ export function buildFacets(products: Product[], category: JewelleryCategorySlug
       options: tally(products, (p) => (p.availability ? [p.availability] : undefined), (v) => v.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())),
     },
     { key: "readyToShip", label: "Ready to Ship", type: "toggle" },
-    { key: "customizable", label: "Customizable", type: "toggle" },
   ];
 
   return facets.filter((f) => (f.type !== "checkbox" && f.type !== "swatch" ? true : (f.options?.length ?? 0) > 0));

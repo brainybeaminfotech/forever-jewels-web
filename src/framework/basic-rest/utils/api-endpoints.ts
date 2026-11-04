@@ -13,4 +13,7 @@ export const API_ENDPOINTS = {
   PRODUCT_DESCRIPTION: "user/product/details",
   HEADER_PRODUCT_SEARCH: "user/product/serach/list",
   FEATURED_PRODUCT: "user/product/featured/list",
+
+  // Filters — `diamondShapeData` maps the list payload's `pdo[].id_shape` to a name
+  PRODUCTSFILTER: "user/filter/list/metal",
 } as const;

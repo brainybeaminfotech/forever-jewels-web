@@ -9,7 +9,7 @@ import http, { isApiConfigured } from "@framework/utils/http";
 import { API_ENDPOINTS } from "@framework/utils/api-endpoints";
 import type { ApiEnvelope, ApiProductListData } from "@framework/types";
 import type { JewelleryCategorySlug, Product } from "@/types";
-import { CATEGORY_API_SLUG, getImageBaseUrl, normaliseProduct } from "./normalise-product";
+import { CATEGORY_API_SLUG, getImageBaseUrl, getShapeNames, normaliseProduct } from "./normalise-product";
 
 /**
  * The listing page filters and sorts client-side over the whole category, so fetch it in
@@ -39,7 +39,7 @@ export async function getProductsByCategoryFromApi(
   }
 
   try {
-    const [response, imageBaseUrl] = await Promise.all([
+    const [response, imageBaseUrl, shapeNames] = await Promise.all([
       http.get<ApiEnvelope<ApiProductListData>>(API_ENDPOINTS.PRODUCTLIST, {
         query: {
           currency,
@@ -49,11 +49,12 @@ export async function getProductsByCategoryFromApi(
         revalidate,
       }),
       getImageBaseUrl(),
+      getShapeNames(),
     ]);
 
     const list = response?.data?.productList ?? [];
     return list
-      .map((item) => normaliseProduct(item, imageBaseUrl, currency))
+      .map((item) => normaliseProduct(item, imageBaseUrl, currency, shapeNames))
       .filter((p): p is Product => p !== null);
   } catch (error) {
     console.error(`[product-list] ${API_ENDPOINTS.PRODUCTLIST} (${category}) failed:`, error);

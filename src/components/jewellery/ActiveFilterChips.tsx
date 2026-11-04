@@ -2,7 +2,7 @@
 
 import { FilterChip } from "@/components/ui";
 import type { Facet, ListingFilters } from "@/lib/catalog";
-import { countActiveFilters, EMPTY_FILTERS } from "@/lib/catalog";
+import { countActiveFilters, EMPTY_FILTERS, MULTI_KEYS } from "@/lib/catalog";
 import { formatPrice } from "@/utils/format";
 
 interface ActiveFilterChipsProps {
@@ -10,21 +10,6 @@ interface ActiveFilterChipsProps {
   filters: ListingFilters;
   onChange: (next: ListingFilters) => void;
 }
-
-const MULTI_KEYS = [
-  "collection",
-  "metal",
-  "goldPurity",
-  "diamondType",
-  "gemstone",
-  "shape",
-  "style",
-  "occasion",
-  "gender",
-  "size",
-  "availability",
-  "certification",
-] as const;
 
 export function ActiveFilterChips({ facets, filters, onChange }: ActiveFilterChipsProps) {
   const activeCount = countActiveFilters(filters);
@@ -53,8 +38,6 @@ export function ActiveFilterChips({ facets, filters, onChange }: ActiveFilterChi
         />
       )}
       {filters.readyToShip && <FilterChip label="Ready to Ship" onRemove={() => onChange({ ...filters, readyToShip: false })} />}
-      {filters.customizable && <FilterChip label="Customizable" onRemove={() => onChange({ ...filters, customizable: false })} />}
-      {filters.featured && <FilterChip label="New & Bestselling" onRemove={() => onChange({ ...filters, featured: false })} />}
       <button type="button" onClick={() => onChange(EMPTY_FILTERS)} className="text-xs uppercase tracking-[0.1em] text-warm-500 underline hover:text-gold-600">
         Clear All
       </button>

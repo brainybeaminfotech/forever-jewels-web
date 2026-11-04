@@ -5,22 +5,7 @@ import { cn } from "@/lib/utils";
 import { formatPrice } from "@/utils/format";
 import { RangeSlider } from "@/components/ui";
 import { FilterSection } from "./FilterSection";
-import type { Facet, ListingFilters } from "@/lib/catalog";
-
-const MULTI_KEYS = [
-  "collection",
-  "metal",
-  "goldPurity",
-  "diamondType",
-  "gemstone",
-  "shape",
-  "style",
-  "occasion",
-  "gender",
-  "size",
-  "availability",
-  "certification",
-] as const;
+import { MULTI_KEYS, type Facet, type ListingFilters } from "@/lib/catalog";
 
 type MultiKey = (typeof MULTI_KEYS)[number];
 
@@ -41,7 +26,7 @@ export function FilterPanelContent({ facets, filters, onChange }: FilterPanelCon
     onChange({ ...filters, [key]: next });
   }
 
-  function toggleBoolean(key: "readyToShip" | "customizable" | "featured") {
+  function toggleBoolean(key: "readyToShip") {
     onChange({ ...filters, [key]: !filters[key] });
   }
 
@@ -67,7 +52,7 @@ export function FilterPanelContent({ facets, filters, onChange }: FilterPanelCon
         }
 
         if (facet.type === "toggle") {
-          const key = facet.key as "readyToShip" | "customizable" | "featured";
+          const key = facet.key as "readyToShip";
           return (
             <FilterSection key={facet.key} title={facet.label} defaultOpen={false}>
               <label className="flex cursor-pointer items-center gap-3 text-sm text-warm-600">
