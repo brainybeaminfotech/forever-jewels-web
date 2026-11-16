@@ -94,6 +94,16 @@ export default function RootLayout({
         </CommerceProvider>
         {/* Right-click / double-click / DevTools-shortcut deterrent — see public/security.js */}
         <Script src="/security.js" strategy="beforeInteractive" />
+        {/* Google Tag Manager */}
+        <Script
+          src="https://www.googletagmanager.com/gtm.js?id=GTM-PLVZGK6B"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());`}
+        </Script>
       </body>
     </html>
   );
