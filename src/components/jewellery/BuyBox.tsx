@@ -66,7 +66,7 @@ export function BuyBox({ product, metal, onMetalChange }: BuyBoxProps) {
 
   function handleBuyNow() {
     addToCart(product, quantity);
-    router.push("/cart");
+    router.push("/checkout");
   }
 
   async function handleShare() {

@@ -31,6 +31,8 @@ interface CommerceState {
 const MAX_COMPARE = 4;
 
 interface CommerceContextValue {
+  /** False until the persisted bag has been read from localStorage — don't treat an empty cart as real before then. */
+  ready: boolean;
   wishlist: string[];
   cart: CartLine[];
   cartCount: number;
@@ -55,6 +57,7 @@ const CommerceContext = createContext<CommerceContextValue | null>(null);
 
 export function CommerceProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<CommerceState>({ wishlist: [], wishlistItems: {}, cart: [], compare: [] });
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     // Read persisted state after mount only — matching the server-rendered
@@ -66,6 +69,7 @@ export function CommerceProvider({ children }: { children: ReactNode }) {
     } catch {
       // ignore malformed storage
     }
+    setReady(true);
   }, []);
 
   useEffect(() => {
@@ -159,6 +163,7 @@ export function CommerceProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<CommerceContextValue>(
     () => ({
+      ready,
       wishlist: state.wishlist,
       cart: state.cart,
       cartCount: state.cart.reduce((sum, line) => sum + line.quantity, 0),
@@ -179,6 +184,7 @@ export function CommerceProvider({ children }: { children: ReactNode }) {
       clearCompare,
     }),
     [
+      ready,
       state,
       isWishlisted,
       toggleWishlist,
