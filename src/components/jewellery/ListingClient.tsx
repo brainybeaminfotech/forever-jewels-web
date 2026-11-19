@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { CompareTray } from "./CompareTray";
 import { FilterDrawer } from "./FilterDrawer";
 import { FilterPanelContent } from "./FilterPanelContent";
@@ -13,6 +14,7 @@ import {
   buildFacets,
   countActiveFilters,
   EMPTY_FILTERS,
+  filtersFromSearchParams,
   sortProducts,
   type ListingFilters,
   type SortKey,
@@ -21,10 +23,21 @@ import {
 interface ListingClientProps {
   products: Product[];
   category: JewelleryCategorySlug;
+  initialFilters?: ListingFilters;
 }
 
-export function ListingClient({ products, category }: ListingClientProps) {
-  const [filters, setFilters] = useState<ListingFilters>(EMPTY_FILTERS);
+/**
+ * `ListingClient` with its filters pre-selected from the URL (`?subCategory=Diamond+Ring`).
+ * Must sit inside a `<Suspense>`: `useSearchParams` would otherwise opt the whole page out of ISR.
+ */
+export function UrlListingClient(props: Omit<ListingClientProps, "initialFilters">) {
+  const params = useSearchParams();
+  // Keyed so a link to a different filter on the same page resets the selection.
+  return <ListingClient key={params.toString()} {...props} initialFilters={filtersFromSearchParams(params)} />;
+}
+
+export function ListingClient({ products, category, initialFilters }: ListingClientProps) {
+  const [filters, setFilters] = useState<ListingFilters>(initialFilters ?? EMPTY_FILTERS);
   const [sort, setSort] = useState<SortKey>("featured");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 

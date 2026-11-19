@@ -177,6 +177,16 @@ export const EMPTY_FILTERS: ListingFilters = {
 
 export const MULTI_KEYS = ["subCategory", "collection", "metal", "goldPurity", "diamondType", "gemstone", "shape", "style", "occasion", "gender", "size", "availability", "certification"] as const;
 
+/** Pre-selects filters from a listing URL, e.g. `?subCategory=Diamond+Ring` (repeat a key for several values). */
+export function filtersFromSearchParams(params: URLSearchParams): ListingFilters {
+  const filters = { ...EMPTY_FILTERS };
+  for (const key of MULTI_KEYS) {
+    const values = params.getAll(key);
+    if (values.length) filters[key] = values;
+  }
+  return filters;
+}
+
 export function countActiveFilters(f: ListingFilters): number {
   let n = 0;
   for (const key of MULTI_KEYS) n += f[key].length;

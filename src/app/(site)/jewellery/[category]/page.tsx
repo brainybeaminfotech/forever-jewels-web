@@ -1,6 +1,7 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ListingClient } from "@/components/jewellery";
+import { ListingClient, UrlListingClient } from "@/components/jewellery";
 import { CATEGORY_META, JEWELLERY_CATEGORIES, isJewelleryCategory } from "@/lib/catalog";
 import { getProductsByCategoryFromApi } from "@framework/product/get-all-products";
 import { JsonLd } from "@/components/common";
@@ -39,7 +40,10 @@ export default async function JewelleryCategoryPage({ params }: CategoryPageProp
           { name: CATEGORY_META[category].label, path: `/jewellery/${category}` },
         ])}
       />
-      <ListingClient products={products} category={category} />
+      {/* The unfiltered grid is the prerendered (ISR) HTML; URL filters apply on the client. */}
+      <Suspense fallback={<ListingClient products={products} category={category} />}>
+        <UrlListingClient products={products} category={category} />
+      </Suspense>
     </>
   );
 }

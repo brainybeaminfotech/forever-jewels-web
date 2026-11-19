@@ -39,6 +39,7 @@ export const IMAGES = {
     "/images/collection-2.png",
     "/images/collection-3.png",
     "/images/collection-4.png",
+    "/images/collection-2-ruby-ring-blue.webp",
   ],
   testimonials: [
     "/images/testimonial-1.jpg",

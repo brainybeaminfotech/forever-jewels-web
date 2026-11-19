@@ -25,7 +25,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     eyebrow: "Signature Engagement",
     title: "A Promise, Set in Stone",
     subtitle: "GIA-certified center stones, chosen one by one for exceptional fire and clarity.",
-    ctaPrimary: { label: "Shop Engagement Rings", href: "/jewellery/rings" },
+    ctaPrimary: { label: "Shop Engagement Rings", href: "/jewellery/rings?subCategory=Diamond+Ring" },
     ctaSecondary: { label: "Learn About Diamonds", href: "/diamonds" },
   },
 ];
